@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+        "target": "ES6",
+        "module": "CommonJS",
+        //strict mode for the types in ts
+        "strict": true,
+        //in node_modules
+        "types": ["node", "jest"],
+        "baseUrl": "./src",
+        //output directory to have a separte directory in compilation
+        "outDir": "build",
+        //to have mapping for ts and js while debugging
+        "sourceMap": true,
+        //related to dotenv
+        "esModuleInterop": true
+        
+    },
+    //all files in src that have .ts
+    "include": ["src/**/*.ts"],
+    "exclude": ["node_modules", "build"]
+
+
+}
