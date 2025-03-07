@@ -53,7 +53,7 @@ const logger = winston.createLogger({
         //show logs in console (terminal)
         // new winston.transports.Console({ format: logConsoleFormat }),
         //show logs in files error.log when we have error
-        new winston.transports.File({ filename: 'error.log', level: 'error', format: logFileFormat }),
+        new winston.transports.File({ filename: 'error.log', level: 'error',  dirname: logDir, format: logFileFormat }),
         //show logs in files combined.log for all logs
         new winston.transports.File({ filename: 'combined.log', dirname: logDir, format: logFileFormat }),
     ],

@@ -2,11 +2,13 @@ import dotenv from "dotenv";
 import path from "path";
 
 
+
 dotenv.config({ path: path.join(__dirname, '../../.env') })
 
 
 export default {
-    secret: process.env.secret || 'default secret',
+    secret: process.env.SECRET || 'default secret',
     logDir: process.env.LOG_DIR || "./logs",
-    isDev: process.env.NODE_ENV === 'development'
+    isDev: process.env.NODE_ENV === 'development',
+    filePath: process.env.FILEPATH || "",
 }

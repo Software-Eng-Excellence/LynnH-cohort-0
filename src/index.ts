@@ -1,8 +1,10 @@
- import { FinancialCalculator, ItemValidator, MaxPriceValidator, OrderManagement, PriceValidator, Validator } from "./app";
+import config from "./config";
+import { FinancialCalculator, ItemValidator, MaxPriceValidator, OrderManagement, PriceValidator, Validator } from "./app";
 import logger from "./util/logger";
 
 import parseCSV from "./util/parser";
 
+const {filePath}=config
 const orders = [
     { id: 1, item: "Sponge", price: 15 },
     { id: 2, item: "Chocolate", price: 20 },
@@ -51,7 +53,7 @@ const nonExistentId = 10;
 // Fetching all orders
 
 async function fetchOrders() {
-    const orders = await parseCSV('src/data/cake.orders.csv');
+    const orders = await parseCSV(filePath);
     //for each data log the row
     orders.forEach((order) => logger.info(order));
     
