@@ -1,9 +1,8 @@
 import { Item, ItemCategory } from "./Item.model";
 
+//The Cake class is a specific implementation of Item, meaning that it’s a type of item that could be ordered.
 export class Cake implements Item {
-    getCategory(): ItemCategory {
-        return ItemCategory.CAKE;
-    }
+    //A cake item has specific properties like type, flavor, filling, layers, etc.
 
     private type: string;
     private flavor: string;
@@ -51,6 +50,12 @@ export class Cake implements Item {
         this.specialIngredients = specialIngredients;
         this.packagingType = packagingType;
     }
+
+    //method defines that this item belongs to the CAKE category
+    getCategory(): ItemCategory {
+        return ItemCategory.CAKE;
+    }
+    // Getter methods for private properties. These allow controlled access.
     getType(): string {
         return this.type;
     }
