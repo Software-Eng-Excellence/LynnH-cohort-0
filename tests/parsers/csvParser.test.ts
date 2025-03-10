@@ -3,21 +3,20 @@ import parseCSV from '../../src/util/parsers/csvParser';
 
 
 describe('CSV Parser', () => {
-    let csvFilePath:string = './src/data/cake orders.csv';
+    let csvFilePath:string = './tests/data/dummy.csv';
     let originalCsvData:string;
    
     beforeAll(() => {
         // Store the original file content for cleanup
         originalCsvData = fs.readFileSync(csvFilePath, 'utf-8');
     });
-    afterAll(() => {
+    afterEach(() => {
         fs.writeFileSync(csvFilePath, originalCsvData);
     });
     let mockData: string;
 
     it('should correctly parse a well-formed CSV file with valid rows', async () => {
-        mockData = 'name,age\nJohn Doe,30\nJane Smith,25';
-        fs.writeFileSync(csvFilePath, mockData);
+ 
         const filePath = csvFilePath;
         const data = await parseCSV(filePath);
         expect(data).toEqual([['John Doe', '30'], ['Jane Smith', '25']]);

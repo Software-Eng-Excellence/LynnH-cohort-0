@@ -3,22 +3,19 @@ import parseJSONFile from "../../src/util/parsers/jsonParser"
 
 
 describe('JSON Parser', () => {
-    let jsonFilePath: string = './src/data/book orders.json';
+    let jsonFilePath: string = './tests/data/dummy.json';
+
     let originalJsonData: string;
 
     beforeAll(() => {
         // Store the original file content for cleanup
         originalJsonData = fs.readFileSync(jsonFilePath, 'utf-8');
     });
-    afterAll(() => {
+    afterEach(() => {
         fs.writeFileSync(jsonFilePath, originalJsonData);
     });
 
-    let mockData: string;
     it('should parse a valid JSON file correctly', async () => {
-
-        mockData = '{"name": "John", "age": 30}';
-        fs.writeFileSync(jsonFilePath, mockData);
         const result = await parseJSONFile(jsonFilePath);
         expect(result).toEqual({ name: 'John', age: 30 });
     });
