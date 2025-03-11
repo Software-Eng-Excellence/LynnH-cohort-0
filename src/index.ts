@@ -3,6 +3,7 @@ import logger from "./util/logger";
 import parseCSV from "./util/parsers/csvParser";
 import parseJSONFile from "./util/parsers/jsonParser";
 import parseXML from "./util/parsers/xmlParser";
+import { CakeBuilder } from "./models/builders/cake.builder";
 
 const { cakeOrderPath, bookOrderPath, petOrdersPath, furnitureOrdersPath, toyOrdersPath } = config;
 
@@ -25,4 +26,30 @@ async function fetchAllOrders() {
     await fetchOrdersFromFile(toyOrdersPath, parseXML);
 }
 
-fetchAllOrders();
+//fetchAllOrders();
+
+async function main() {
+    const cakeBuilder = new CakeBuilder();
+    //method chaining 
+    cakeBuilder.setType("type")
+        .setFlavor("chocolate")
+        .setFilling("strawberry")
+        .setSize(10)
+        .setLayers(3)
+        .setFrostingType("buttercream")
+        .setFrostingFlavor("vanilla")
+        .setDecorationType("flowers")
+        .setDecorationColor("red")
+        .setCustomMessage("Happy Birthday")
+        .setShape("round")
+        .setAllergies("nuts")
+        .setSpecialIngredients("organic flour")
+        .setPackagingType("box");
+
+    const cake = cakeBuilder.build();
+    console.log(cake);
+}
+main();
+
+
+
