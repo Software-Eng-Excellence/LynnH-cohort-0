@@ -1,7 +1,7 @@
-import { Item, ItemCategory } from "./Item.model";
+import { IItem, ItemCategory } from "./IItem";
 
 //The Cake class is a specific implementation of Item, meaning that it’s a type of item that could be ordered.
-export class Cake implements Item {
+export class Cake implements IItem {
     //A cake item has specific properties like type, flavor, filling, layers, etc.
 
     private type: string;

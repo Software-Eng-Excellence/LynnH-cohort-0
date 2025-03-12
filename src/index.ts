@@ -3,7 +3,8 @@ import logger from "./util/logger";
 import parseCSV from "./util/parsers/csvParser";
 import parseJSONFile from "./util/parsers/jsonParser";
 import parseXML from "./util/parsers/xmlParser";
-import { CakeBuilder } from "./models/builders/cake.builder";
+import { CSVCakeMapper } from "./mappers/Cake.mapper";
+import { CSVOrderMapper } from "./mappers/Order.mapper";
 
 const { cakeOrderPath, bookOrderPath, petOrdersPath, furnitureOrdersPath, toyOrdersPath } = config;
 
@@ -29,26 +30,16 @@ async function fetchAllOrders() {
 //fetchAllOrders();
 
 async function main() {
-    const cakeBuilder = new CakeBuilder();
-    //method chaining 
-    cakeBuilder.setType("type")
-        .setFlavor("chocolate")
-        .setFilling("strawberry")
-        .setSize(10)
-        .setLayers(3)
-        .setFrostingType("buttercream")
-        .setFrostingFlavor("vanilla")
-        .setDecorationType("flowers")
-        .setDecorationColor("red")
-        .setCustomMessage("Happy Birthday")
-        .setShape("round")
-        .setAllergies("nuts")
-        .setSpecialIngredients("organic flour")
-        .setPackagingType("box");
-
-    const cake = cakeBuilder.build();
-    console.log(cake);
+    const data = await parseCSV(cakeOrderPath)
+    const cakeMapper = new CSVCakeMapper();
+    const cakes = data.map(cakeMapper.map)
+    logger.info("List of cakes \n %o", cakes)
+    const orderMapper = new CSVOrderMapper(cakeMapper);
+    const orders = data.map(orderMapper.map.bind(orderMapper));
+    //or  data.map((row)=>orderMapper.map(row));
+    logger.info("List of orders \n %o", orders)
 }
+
 main();
 
 
