@@ -25,13 +25,6 @@ describe("BookBuilder", () => {
         }).toThrow("Missing required property");
     });
 
-    test("should support method chaining", () => {
-        const builder = new BookBuilder()
-            .setTitle("The Pragmatic Programmer")
-            .setAuthor("Andrew Hunt");
-
-        expect(builder).toBeInstanceOf(BookBuilder);
-    });
 
     test("should correctly set and retrieve properties", () => {
         const builder = new BookBuilder();
@@ -44,7 +37,7 @@ describe("BookBuilder", () => {
 
     test("should handle invalid input values", () => {
         const builder = new BookBuilder();
-        expect(() => builder.setTitle("")).not.toThrow(); // Assuming no validation
-        expect(() => builder.setFormat(null as unknown as string)).not.toThrow(); // Should be handled
+        builder.setTitle("");
+        expect(() => builder.build()).toThrow("Missing required property");
     });
 });

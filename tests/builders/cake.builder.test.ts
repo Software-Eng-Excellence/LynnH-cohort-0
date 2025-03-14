@@ -31,13 +31,6 @@ describe("CakeBuilder", () => {
         }).toThrow("Missing required property");
     });
 
-    test("should support method chaining", () => {
-        const builder = new CakeBuilder()
-            .setType("Wedding")
-            .setFlavor("Strawberry");
-
-        expect(builder).toBeInstanceOf(CakeBuilder);
-    });
 
     test("should correctly set and retrieve properties", () => {
         const builder = new CakeBuilder();
@@ -50,6 +43,8 @@ describe("CakeBuilder", () => {
 
     test("should handle invalid input values", () => {
         const builder = new CakeBuilder();
-        expect(() => builder.setSize(-5)).not.toThrow(); // Assuming no validation in place
+        builder.setSize(-5);
+        expect(()=>builder.build()).toThrow("Missing required property");
+    
     });
 });

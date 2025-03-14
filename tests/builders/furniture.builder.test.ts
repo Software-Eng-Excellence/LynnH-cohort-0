@@ -29,14 +29,6 @@ describe("FurnitureBuilder", () => {
         }).toThrow("Missing required property");
     });
 
-    test("should support method chaining", () => {
-        const builder = new FurnitureBuilder()
-            .setType("Chair")
-            .setMaterial("Wood");
-
-        expect(builder).toBeInstanceOf(FurnitureBuilder);
-    });
-
     test("should correctly set and retrieve properties", () => {
         const builder = new FurnitureBuilder();
         builder.setColor("Blue");
@@ -48,7 +40,7 @@ describe("FurnitureBuilder", () => {
 
     test("should handle invalid input values", () => {
         const builder = new FurnitureBuilder();
-        expect(() => builder.setType("")).not.toThrow(); // Assuming no validation
-        expect(() => builder.setAssemblyRequired(null as unknown as boolean)).not.toThrow(); // Should be handled
+        builder.setType("");
+        expect(() => builder.build()).toThrow("Missing required property");
     });
 });

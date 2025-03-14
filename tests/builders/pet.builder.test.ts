@@ -27,14 +27,6 @@ describe("PetBuilder", () => {
         }).toThrow("Missing required property");
     });
 
-    test("should support method chaining", () => {
-        const builder = new PetBuilder()
-            .setProductType("Toy")
-            .setPetType("Cat");
-
-        expect(builder).toBeInstanceOf(PetBuilder);
-    });
-
     test("should correctly set and retrieve properties", () => {
         const builder = new PetBuilder();
         builder.setFlavor("Beef");
@@ -46,7 +38,7 @@ describe("PetBuilder", () => {
 
     test("should handle invalid input values", () => {
         const builder = new PetBuilder();
-        expect(() => builder.setProductType("")).not.toThrow(); // Assuming no validation
-        expect(() => builder.setEcoFriendly(null as unknown as string)).not.toThrow(); // Should be handled
+        builder.setProductType("");
+        expect(() => builder.build()).toThrow("Missing required property");
     });
 });

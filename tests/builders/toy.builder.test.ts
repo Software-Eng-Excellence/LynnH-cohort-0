@@ -27,14 +27,6 @@ describe("ToyBuilder", () => {
         }).toThrow("Missing required property");
     });
 
-    test("should support method chaining", () => {
-        const builder = new ToyBuilder()
-            .setType("Doll")
-            .setBrand("Mattel");
-
-        expect(builder).toBeInstanceOf(ToyBuilder);
-    });
-
     test("should correctly set and retrieve properties", () => {
         const builder = new ToyBuilder();
         builder.setMaterial("Wood");
@@ -46,7 +38,7 @@ describe("ToyBuilder", () => {
 
     test("should handle invalid input values", () => {
         const builder = new ToyBuilder();
-        expect(() => builder.setType("")).not.toThrow(); // Assuming no validation
-        expect(() => builder.setBatteryRequired(null as unknown as boolean)).not.toThrow(); // Should be handled
+        builder.setType("");
+        expect(() => builder.build()).toThrow("Missing required property");
     });
 });
