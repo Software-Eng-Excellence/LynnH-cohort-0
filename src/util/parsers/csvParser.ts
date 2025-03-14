@@ -51,7 +51,7 @@ const parseCSV = (filePath: string, options: CSVParserOptions = {}): Promise<str
     });
 
     readStream.on('error', (error) => {
-      customLogger.error("Error while reading the stream of file %s, $o", filePath, error);
+      customLogger.error("Error while reading the stream of file %s, %o", filePath, error);
       reject(error); // Reject the promise if an error occurs
     });
   });

@@ -1,5 +1,5 @@
 import { Book } from "../../models/Book.models";
-import logger from "../../util/logger";
+
 
 export class BookBuilder{
     private title!: string;
@@ -10,6 +10,10 @@ export class BookBuilder{
     private publisher!: string;
     private specialEdition!: string;
     private packaging!: string;
+
+    public static newBuilder():BookBuilder{
+        return new BookBuilder();
+    }
 
     public setTitle(title: string): BookBuilder {
         this.title = title;
@@ -63,7 +67,7 @@ export class BookBuilder{
         ];
 
         for (const property of requiredProperties) {
-            if (!property) {
+            if (property === undefined || property === null) {
                 throw new Error('Missing required property');
             }
         }

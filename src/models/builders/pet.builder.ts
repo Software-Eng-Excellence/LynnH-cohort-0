@@ -1,5 +1,4 @@
 import { Pet } from "../../models/Pet.models";
-import logger from "../../util/logger";
 
 export class PetBuilder {
     private productType!: string;
@@ -8,6 +7,10 @@ export class PetBuilder {
     private size!: string;
     private flavor!: string;
     private ecoFriendly!: string;
+
+    public static newBuilder():PetBuilder{
+        return new PetBuilder();
+    }
 
     public setProductType(productType: string): PetBuilder {
         this.productType = productType;
@@ -50,7 +53,7 @@ export class PetBuilder {
         ];
 
         for (const property of requiredProperties) {
-            if (!property) {
+            if (property === undefined || property === null) {
                 throw new Error('Missing required property');
             }
         }

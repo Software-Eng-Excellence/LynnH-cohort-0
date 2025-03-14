@@ -15,4 +15,5 @@ export default {
     petOrdersPath: process.env.PET_ORDERS_PATH || "",
     furnitureOrdersPath: process.env.FURNITURE_ORDERS_PATH || "",
     toyOrdersPath: process.env.TOY_ORDERS_PATH || "",
+    clothingOrdersPath:process.env.CLOTHING_ORDERS_PATH || ""
 }

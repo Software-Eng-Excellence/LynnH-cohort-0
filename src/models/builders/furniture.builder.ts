@@ -1,5 +1,5 @@
 import { Furniture } from "../../models/Furniture.models";
-import logger from "../../util/logger";
+
 
 export class FurnitureBuilder{
     private type!: string;
@@ -9,6 +9,10 @@ export class FurnitureBuilder{
     private style!: string;
     private assemblyRequired!: boolean;
     private warranty!: string;
+
+    public static newBuilder():FurnitureBuilder{
+        return new FurnitureBuilder();
+    }
 
     public setType(type: string): FurnitureBuilder {
         this.type = type;
@@ -58,7 +62,7 @@ export class FurnitureBuilder{
         ];
 
         for (const property of requiredProperties) {
-            if (!property) {
+            if (property === undefined || property === null) {
                 throw new Error('Missing required property');
             }
         }

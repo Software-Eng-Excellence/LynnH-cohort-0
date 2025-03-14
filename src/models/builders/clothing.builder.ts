@@ -12,6 +12,10 @@ export class ClothingBuilder {
     private packaging!: string;
     private specialRequest!: string;
 
+    public static newBuilder():ClothingBuilder{
+        return new ClothingBuilder();
+    }
+
     public setType(type: string): ClothingBuilder {
         this.type = type;
         return this;
@@ -70,7 +74,7 @@ export class ClothingBuilder {
         ];
 
         for (const property of requiredProperties) {
-            if (!property) {
+           if (property === undefined || property === null) {
                 throw new Error('Missing required property');
             }
         }

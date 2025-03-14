@@ -10,7 +10,7 @@ type XMLParserOptions = {
 };
 
 // parse XML File
-const parseXML = (filePath: string, options: XMLParserOptions = {}): Promise<string[][]> => {
+const parseXML = (filePath: string, options: XMLParserOptions = {}): Promise<Record<string, string>[]> => {
     return new Promise((resolve, reject) => {
         const { createReadStream = fs.createReadStream, customLogger = logger } = options;
         let xmlData: string = '';
