@@ -3,123 +3,60 @@ import logger from "./util/logger";
 import parseCSV from "./util/parsers/csvParser";
 import parseJSONFile from "./util/parsers/jsonParser";
 import parseXML from "./util/parsers/xmlParser";
-import { CakeBuilder } from "./models/builders/cake.builder";
-import { BookBuilder } from "./models/builders/book.builder";
-import { ClothingBuilder } from "./models/builders/clothing.builder";
-import { FurnitureBuilder } from "./models/builders/furniture.builder";
-import { PetBuilder } from "./models/builders/pet.builder";
-import { ToyBuilder } from "./models/builders/toy.builder";
+import { CSVCakeMapper } from "./mappers/Cake.mapper";
+import { CSVOrderMapper } from "./mappers/Order.mapper";
+import { CSVClothingMapper } from "./mappers/Clothing.mapper";
+import { JSONBookMapper } from "./mappers/Book.mapper";
+import { JSONPetMapper } from "./mappers/pet.mapper";
+import { XMLToyMapper } from "./mappers/toy.mapper";
+import { XMLFurnitureMapper } from "./mappers/furniture.mapper";
 
-const { cakeOrderPath, bookOrderPath, petOrdersPath, furnitureOrdersPath, toyOrdersPath } = config;
+const { cakeOrderPath, bookOrderPath, petOrdersPath, furnitureOrdersPath, toyOrdersPath, clothingOrdersPath } = config;
 
-// Fetching all cake orders
-async function fetchOrdersFromFile(filePath: string, parser: Function) {
-    const orders = await parser(filePath);
-
-    //for each data log the row
-    orders.forEach((order: Object) => {
-        logger.info(JSON.stringify(order))
-    });
-
-}
-
-async function fetchAllOrders() {
-    await fetchOrdersFromFile(cakeOrderPath, parseCSV);
-    await fetchOrdersFromFile(bookOrderPath, parseJSONFile);
-    await fetchOrdersFromFile(petOrdersPath, parseJSONFile);
-    await fetchOrdersFromFile(furnitureOrdersPath, parseXML);
-    await fetchOrdersFromFile(toyOrdersPath, parseXML);
-}
-
-//fetchAllOrders();
 
 async function main() {
     try {
-        const cakeBuilder = new CakeBuilder();
-        //method chaining 
-        cakeBuilder.setType("type")
-            .setFlavor("chocolate")
-            .setFilling("strawberry")
-            .setSize(10)
-            .setLayers(3)
-            .setFrostingType("buttercream")
-            .setFrostingFlavor("vanilla")
-            .setDecorationType("flowers")
-            .setDecorationColor("red")
-            .setCustomMessage("Happy Birthday")
-            .setShape("round")
-            .setAllergies("nuts")
-            .setSpecialIngredients("organic flour")
-            .setPackagingType("box");
+        const cakeData = await parseCSV(cakeOrderPath)
+        const cakeMapper = new CSVCakeMapper();
+        const cakes = cakeData.map(cakeMapper.map)
 
-        const cake = cakeBuilder.build();
-        console.log(cake);
+        const clothingData = await parseCSV(clothingOrdersPath)
 
-        const bookBuilder = new BookBuilder();
-        bookBuilder.setTitle("The Great Gatsby")
-            .setAuthor("F. Scott Fitzgerald")
-            .setGenre("Fiction")
-            .setFormat("Hardcover")
-            .setLanguage("English")
-            .setPublisher("Scribner")
-            .setSpecialEdition("First Edition")
-            .setPackaging("Slipcase");
+        const clothingMapper = new CSVClothingMapper();
+        const clothings = clothingData.map(clothingMapper.map)
 
-        const book = bookBuilder.build();
-        console.log(book);
+        const cakeOrderMapper = new CSVOrderMapper(cakeMapper);
+        const cakeOrders = cakeData.map(cakeOrderMapper.map.bind(cakeOrderMapper));
+        //or  cakeData.map((row)=>orderMapper.map(row));
+        logger.info("List of orders \n %o", cakeOrders);
 
-        const clothingBuilder = new ClothingBuilder();
-        clothingBuilder.setType("T-Shirt")
-            .setSize("M")
-            .setColor("Blue")
-            .setMaterial("Cotton")
-            .setPattern("Solid")
-            .setBrand("BrandName")
-            .setGender("Unisex")
-            .setPackaging("Plastic Bag")
-            .setSpecialRequest("None");
+        const clothingOrderMapper = new CSVOrderMapper(clothingMapper);
+        const clothingOrders = clothingData.map(clothingOrderMapper.map.bind(clothingOrderMapper));
+        logger.info("List of clothing orders \n %o", clothingOrders);
 
-        const clothing = clothingBuilder.build();
-        console.log(clothing);
+        const bookData: { [key: string]: string; }[] = await parseJSONFile(bookOrderPath);
 
-        const furnitureBuilder = new FurnitureBuilder();
-        furnitureBuilder.setType("Chair")
-            .setMaterial("Wood")
-            .setColor("Brown")
-            .setSize("Medium")
-            .setStyle("Modern")
-            .setAssemblyRequired(true)
-            .setWarranty("2 years");
+        const bookMapper = new JSONBookMapper();
+        const bookOrders = bookData.map(bookMapper.map.bind(bookMapper));
 
-        const furniture = furnitureBuilder.build();
-        console.log(furniture);
+        logger.info("List of book orders \n %o", bookOrders);
+        const petData: { [key: string]: string; }[] = await parseJSONFile(petOrdersPath);
+        const petMapper = new JSONPetMapper();
+        const petOrders = petData.map(petMapper.map.bind(petMapper));
+        logger.info("List of pet orders \n %o", petOrders);
 
-        const petBuilder = new PetBuilder();
-        petBuilder.setProductType("Food")
-            .setPetType("Dog")
-            .setBrand("BrandName")
-            .setSize("Large")
-            .setFlavor("Chicken")
-            .setEcoFriendly("Yes");
+        const toyData: { [key: string]: string; }[] = await parseXML(toyOrdersPath);
+        const toyMapper = new XMLToyMapper();
+        const toyOrders = toyData.map(toyMapper.map.bind(toyMapper));
+        logger.info("List of toy orders \n %o", toyOrders);
 
-        const pet = petBuilder.build();
-        console.log(pet);
-
-        const toyBuilder = new ToyBuilder();
-        toyBuilder.setType("Action Figure")
-            .setAgeGroup("5+")
-            .setBrand("ToyBrand")
-            .setMaterial("Plastic")
-            .setBatteryRequired(true)
-            .setEducational(true);
-
-        const toy = toyBuilder.build();
-        console.log(toy);
+        const furnitureData: { [key: string]: string; }[] = await parseXML(furnitureOrdersPath);
+        const furnitureMapper = new XMLFurnitureMapper();
+        const furnitureOrders = furnitureData.map(furnitureMapper.map.bind(furnitureMapper));
+        logger.info("List of furniture orders \n %o", furnitureOrders);
     } catch (error) {
         logger.error(error);
     }
 }
+
 main();
-
-
-

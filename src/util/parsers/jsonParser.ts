@@ -10,7 +10,7 @@ type JSONParserOptions = {
 };
 
 // parse JSON File
-const parseJSONFile = (filePath: string, options: JSONParserOptions = {}): Promise<string[][]> => {
+const parseJSONFile = (filePath: string, options: JSONParserOptions = {}): Promise<Record<string, string>[]> => {
     return new Promise((resolve, reject) => {
         const { createReadStream = fs.createReadStream, customLogger = logger } = options;
         let jsonString: string = '';
