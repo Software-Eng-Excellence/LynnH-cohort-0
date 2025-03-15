@@ -3,7 +3,7 @@ import { JSONPetMapper } from "../../src/mappers/pet.mapper";
 describe("JSONPetMapper", () => {
     let mapper: JSONPetMapper;
 
-    beforeEach(() => {
+    beforeAll(() => {
         mapper = new JSONPetMapper();
     });
 

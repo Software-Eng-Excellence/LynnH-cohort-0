@@ -4,7 +4,7 @@ import { XMLToyMapper } from "../../src/mappers/toy.mapper";
 describe("XMLToyMapper", () => {
     let mapper: XMLToyMapper;
 
-    beforeEach(() => {
+    beforeAll(() => {
         mapper = new XMLToyMapper();
     });
 

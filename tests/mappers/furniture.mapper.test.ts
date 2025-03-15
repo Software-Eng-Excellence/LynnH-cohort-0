@@ -4,7 +4,7 @@ import { XMLFurnitureMapper } from "../../src/mappers/furniture.mapper";
 describe("XMLFurnitureMapper", () => {
     let mapper: XMLFurnitureMapper;
 
-    beforeEach(() => {
+    beforeAll(() => {
         mapper = new XMLFurnitureMapper();
     });
 

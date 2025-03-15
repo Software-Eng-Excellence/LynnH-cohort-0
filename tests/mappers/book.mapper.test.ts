@@ -3,7 +3,7 @@ import { JSONBookMapper } from "../../src/mappers/Book.mapper";
 describe("JSONBookMapper", () => {
     let mapper: JSONBookMapper;
 
-    beforeEach(() => {
+    beforeAll(() => {
         mapper = new JSONBookMapper();
     });
 

@@ -4,7 +4,7 @@ import { CSVClothingMapper } from "../../src/mappers/Clothing.mapper";
 describe("CSVClothingMapper", () => {
     let mapper: CSVClothingMapper;
 
-    beforeEach(() => {
+    beforeAll(() => {
         mapper = new CSVClothingMapper();
     });
 

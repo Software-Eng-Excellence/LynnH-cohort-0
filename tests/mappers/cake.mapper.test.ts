@@ -4,7 +4,7 @@ import { Cake } from "../../src/models/Cake.models";
 describe("CSVCakeMapper", () => {
     let mapper: CSVCakeMapper;
 
-    beforeEach(() => {
+    beforeAll(() => {
         mapper = new CSVCakeMapper();
     });
 

@@ -13,26 +13,6 @@ import { XMLFurnitureMapper } from "./mappers/furniture.mapper";
 
 const { cakeOrderPath, bookOrderPath, petOrdersPath, furnitureOrdersPath, toyOrdersPath, clothingOrdersPath } = config;
 
-// Fetching all cake orders
-async function fetchOrdersFromFile(filePath: string, parser: Function) {
-    const orders = await parser(filePath);
-
-    //for each cakeData log the row
-    orders.forEach((order: Object) => {
-        logger.info(JSON.stringify(order))
-    });
-
-}
-
-async function fetchAllOrders() {
-    //await fetchOrdersFromFile(cakeOrderPath, parseCSV);
-    await fetchOrdersFromFile(bookOrderPath, parseJSONFile);
-    //await fetchOrdersFromFile(petOrdersPath, parseJSONFile);
-    //await fetchOrdersFromFile(furnitureOrdersPath, parseXML);
-    //await fetchOrdersFromFile(toyOrdersPath, parseXML);
-}
-
-//fetchAllOrders();
 
 async function main() {
     try {
@@ -45,8 +25,6 @@ async function main() {
         const clothingMapper = new CSVClothingMapper();
         const clothings = clothingData.map(clothingMapper.map)
 
-
-        //logger.info("List of cakes \n %o", cakes)
         const cakeOrderMapper = new CSVOrderMapper(cakeMapper);
         const cakeOrders = cakeData.map(cakeOrderMapper.map.bind(cakeOrderMapper));
         //or  cakeData.map((row)=>orderMapper.map(row));
