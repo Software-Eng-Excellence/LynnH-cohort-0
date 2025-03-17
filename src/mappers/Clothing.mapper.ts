@@ -16,4 +16,18 @@ export class CSVClothingMapper implements IMapper<string[], Clothing> {
             .setSpecialRequest(data[9])
             .build();
     }
+
+    reverseMap(clothing: Clothing): string[] {
+        return [
+            clothing.getType(),
+            clothing.getSize(),
+            clothing.getColor(),
+            clothing.getMaterial(),
+            clothing.getPattern(),
+            clothing.getBrand(),
+            clothing.getGender(),
+            clothing.getPackaging(),
+            clothing.getSpecialRequest()
+        ];
+    }
 }

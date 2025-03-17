@@ -1,6 +1,7 @@
 import fs from 'fs';
  import logger from '../logger';
 import { isRowValid } from '../validators';
+import { createWriteStream } from 'fs';
 
 //to apply DIP principle : 
 type CSVParserOptions = {
@@ -10,8 +11,32 @@ type CSVParserOptions = {
   includeHeader?: boolean; // Move includeHeader into the options for clarity
 };
 
+type WriteCSVOptions = {
+  customLogger?: typeof logger; // Use an injected logger for better flexibility
+};
+
+// write CSV File
+ const writeCSV = (filePath: string, data: string[][], options: WriteCSVOptions = {}): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    const { customLogger = logger } = options;
+    const writeStream = createWriteStream(filePath, { encoding: 'utf-8' });
+
+    writeStream.on('error', (error) => {
+      customLogger.error("Error while writing to the file %s, %o", filePath, error);
+      reject(error); // Reject the promise if an error occurs
+    });
+
+    data.forEach((row) => {
+      writeStream.write(row.join(',') + '\n', 'utf-8');
+    });
+
+    writeStream.end(() => {
+      resolve(); // Resolve the promise when writing is done
+    });
+  });
+};
 // parse CSV File
-const parseCSV = (filePath: string, options: CSVParserOptions = {}): Promise<string[][]> => {
+ const readCSV = (filePath: string, options: CSVParserOptions = {}): Promise<string[][]> => {
   return new Promise((resolve, reject) => {
     const { createReadStream = fs.createReadStream, customLogger = logger, validator=isRowValid, includeHeader = false } = options;
     
@@ -57,4 +82,4 @@ const parseCSV = (filePath: string, options: CSVParserOptions = {}): Promise<str
   });
 };
 
-export default parseCSV;
+export {readCSV, writeCSV};
