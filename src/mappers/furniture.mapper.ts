@@ -14,4 +14,16 @@ export class XMLFurnitureMapper implements IMapper<{ [key: string]: string }, Fu
             .setWarranty(data["Warranty"])
             .build();
     }
+
+    reverseMap(furniture: Furniture): { [key: string]: string } {
+        return {
+            Type: furniture.getType(),
+            Material: furniture.getMaterial(),
+            Color: furniture.getColor(),
+            Size: furniture.getSize(),
+            Style: furniture.getStyle(),
+            AssemblyRequired: furniture.isAssemblyRequired() ? "Yes" : "No",
+            Warranty: furniture.getWarranty()
+        };
+    }
 }
