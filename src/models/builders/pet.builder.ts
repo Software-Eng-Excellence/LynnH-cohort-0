@@ -1,4 +1,5 @@
-import { Pet } from "../../models/Pet.models";
+import logger from "../../util/logger";
+import { IdentifiablePet, Pet } from "../../models/Pet.models";
 
 export class PetBuilder {
     private productType!: string;
@@ -65,6 +66,43 @@ export class PetBuilder {
             this.size,
             this.flavor,
             this.ecoFriendly
+        );
+    }
+}
+
+
+export class IdentifiablePetBuilder {
+    private id!: string;
+    private pet!: Pet;
+
+     static newBuilder(): IdentifiablePetBuilder {
+        return new IdentifiablePetBuilder();
+    }
+
+     setId(id: string): IdentifiablePetBuilder {
+        this.id = id;
+        return this;
+    }
+
+     setPet(pet: Pet): IdentifiablePetBuilder {
+        this.pet = pet;
+        return this;
+    }
+
+     build(): IdentifiablePet {
+        if (!this.id || !this.pet) {
+            logger.error("Missing required properties, could not build an identifiable pet");
+            throw new Error("Missing required properties");
+        }
+
+        return new IdentifiablePet(
+            this.id,
+            this.pet.getProductType(),
+            this.pet.getPetType(),
+            this.pet.getBrand(),
+            this.pet.getSize(),
+            this.pet.getFlavor(),
+            this.pet.getEcoFriendly()
         );
     }
 }

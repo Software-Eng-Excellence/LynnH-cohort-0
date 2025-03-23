@@ -1,4 +1,5 @@
-import { Furniture } from "../../models/Furniture.models";
+import logger from "../../util/logger";
+import { Furniture, IdentifiableFurniture } from "../../models/Furniture.models";
 
 
 export class FurnitureBuilder{
@@ -75,5 +76,42 @@ export class FurnitureBuilder{
             this.assemblyRequired,
             this.warranty
         )
+    }
+}
+
+export class IdentifiableFurnitureBuilder {
+    private id!: string;
+    private furniture!: Furniture;
+
+     static newBuilder(): IdentifiableFurnitureBuilder {
+        return new IdentifiableFurnitureBuilder();
+    }
+
+     setId(id: string): IdentifiableFurnitureBuilder {
+        this.id = id;
+        return this;
+    }
+
+     setFurniture(furniture: Furniture): IdentifiableFurnitureBuilder {
+        this.furniture = furniture;
+        return this;
+    }
+
+     build(): IdentifiableFurniture {
+        if (!this.id || !this.furniture) {
+            logger.error("Missing required properties, could not build an identifiable furniture");
+            throw new Error("Missing required properties");
+        }
+
+        return new IdentifiableFurniture(
+            this.id,
+            this.furniture.getType(),
+            this.furniture.getMaterial(),
+            this.furniture.getColor(),
+            this.furniture.getSize(),
+            this.furniture.getStyle(),
+            this.furniture.isAssemblyRequired(),
+            this.furniture.getWarranty()
+        );
     }
 }
