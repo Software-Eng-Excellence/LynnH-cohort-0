@@ -24,8 +24,9 @@ export default {
             toyOrdersPath: process.env.TOY_ORDERS_PATH || "",
         },
         sqlite:
-           "src/data/orders.db"
-        
+            "src/data/orders.sqlite.db",
+        postgreSQL: "src/data/orders.postgresql.db"
+
 
     }
 

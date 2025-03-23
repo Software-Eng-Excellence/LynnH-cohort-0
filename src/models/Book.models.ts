@@ -1,4 +1,6 @@
-import { IItem, ItemCategory } from "./IItem";
+import { id } from "repository/IRepository";
+import { IItem, ItemCategory,IIdentifiableItem } from "./IItem";
+
 
 export class Book implements IItem {
    
@@ -66,4 +68,29 @@ export class Book implements IItem {
     getPackaging(): string {
         return this.packaging;
     }
+}
+
+//it inherits all the properties and methods from Book while adding an additional feature: an identifier id
+
+export class IdentifiableBook extends Book implements IIdentifiableItem {
+    
+    constructor(
+        private id: id,
+        title: string,
+        author: string,
+        genre: string,
+        format: string,
+        language: string,
+        publisher: string,
+        specialEdition: string,
+        packaging: string
+    ) {
+        super(title, author, genre, format, language, publisher, specialEdition, packaging);
+       
+    }
+
+    getId(): id {
+        return this.id;
+    }
+
 }

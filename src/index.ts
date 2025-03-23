@@ -2,7 +2,7 @@ import config from "./config/index";
 import logger from "./util/logger";
 import { CakeOrderRepository } from "./repository/file/Cake.order.repository";
 import { CakeRepository } from "./repository/sqlite/Cake.order.repository";
-import { OrderRepository } from "./repository/sqlite/order.repository";
+import { OrderRepository } from "./repository/sqlite/Order.repository";
 import { CakeBuilder, IdentifiableCakeBuilder } from "../src/models/builders/cake.builder";
 import { IdentifiableOrderItemBuilder, OrderBuilder } from "../src/models/builders/order.builder";
 

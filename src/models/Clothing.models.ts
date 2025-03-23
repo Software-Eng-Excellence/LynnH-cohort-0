@@ -1,4 +1,5 @@
-import { IItem, ItemCategory } from "./IItem";
+import { id } from "repository/IRepository";
+import { IIdentifiableItem, IItem, ItemCategory } from "./IItem";
 
 export class Clothing implements IItem {
     
@@ -73,4 +74,28 @@ export class Clothing implements IItem {
         return this.specialRequest;
     }
 
+}
+
+export class IdentifiableClothing extends Clothing implements IIdentifiableItem {
+    
+
+    constructor(
+        private id: id,
+        type: string,
+        size: string,
+        color: string,
+        material: string,
+        pattern: string,
+        brand: string,
+        gender: string,
+        packaging: string,
+        specialRequest: string
+    ) {
+        super(type, size, color, material, pattern, brand, gender, packaging, specialRequest);
+        
+    }
+
+    getId(): id {
+        return this.id;
+    }
 }
