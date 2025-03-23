@@ -1,4 +1,5 @@
-import { Cake } from "../../models/Cake.models";
+import logger from "../../util/logger";
+import { Cake, IIdentifiableCake } from "../../models/Cake.models";
 
 export class CakeBuilder {
     private type!: string;
@@ -16,7 +17,7 @@ export class CakeBuilder {
     private specialIngredients!: string;
     private packagingType!: string;
 
-    public static newBuilder():CakeBuilder{
+    public static newBuilder(): CakeBuilder {
         return new CakeBuilder();
     }
 
@@ -129,5 +130,46 @@ export class CakeBuilder {
             this.specialIngredients,
             this.packagingType
         );
+    }
+}
+export class IdentifiableCakeBuilder {
+    private id!: string;
+    private cake!: Cake;
+    static newBuilder(): IdentifiableCakeBuilder {
+        return new IdentifiableCakeBuilder();
+    }
+
+    setId(id: string): IdentifiableCakeBuilder {
+        this.id = id;
+        return this;
+    }
+
+    setCake(cake: Cake): IdentifiableCakeBuilder {
+        this.cake = cake;
+        return this;
+    }
+    build(): IIdentifiableCake {
+        if (!this.id || !this.cake) {
+            logger.error("Missing required properties, could not build an identifiable cake");
+            throw new Error("Missing required properties");
+        }
+
+        return new IIdentifiableCake
+            (this.id,
+                this.cake.getType(),
+                this.cake.getFlavor(),
+                this.cake.getFilling(),
+                this.cake.getSize(),
+                this.cake.getLayers(),
+                this.cake.getFrostingType(),
+                this.cake.getFrostingFlavor(),
+                this.cake.getDecorationType(),
+                this.cake.getDecorationColor(),
+                this.cake.getCustomMessage(),
+                this.cake.getShape(),
+                this.cake.getAllergies(),
+                this.cake.getSpecialIngredients(),
+                this.cake.getPackagingType()
+            );
     }
 }

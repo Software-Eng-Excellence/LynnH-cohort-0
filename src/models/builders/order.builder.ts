@@ -1,5 +1,6 @@
-import { IItem } from "../IItem";
-import { Order } from "../Order.model";
+import { IIdentifiableItem, IItem } from "../IItem";
+import { IdentifiableOrderItem, Order } from "../Order.model";
+
 
 export class OrderBuilder {
     private item!: IItem;
@@ -50,5 +51,32 @@ export class OrderBuilder {
             this.quantity,
             this.id
         );
+    }
+}
+// It focuses on one item at a time, linking it to the broader order.
+//wrap order with item 
+export class IdentifiableOrderItemBuilder {
+
+    private item!: IIdentifiableItem;
+    private order!: Order
+
+    static newBuilder(): IdentifiableOrderItemBuilder {
+        return new IdentifiableOrderItemBuilder();
+    }
+
+    setItem(item: IIdentifiableItem): IdentifiableOrderItemBuilder {
+        this.item = item;
+        return this;
+    }
+    setOrder(order: Order): IdentifiableOrderItemBuilder {
+        this.order = order;
+        return this;
+    }
+    build(): IdentifiableOrderItem {
+        if (!this.item || !this.order) {
+            throw new Error("Missing required properties to build an Identifiable  Order")
+
+        }
+        return new IdentifiableOrderItem(this.item, this.order.getPrice(), this.order.getQuantity(), this.order.getId())
     }
 }
