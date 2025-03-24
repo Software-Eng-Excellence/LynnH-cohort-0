@@ -5,9 +5,10 @@ import { CakeRepository } from "./repository/sqlite/Cake.order.repository";
 import { OrderRepository } from "./repository/sqlite/Order.repository";
 import { CakeBuilder, IdentifiableCakeBuilder } from "../src/models/builders/cake.builder";
 import { IdentifiableOrderItemBuilder, OrderBuilder } from "../src/models/builders/order.builder";
+import { ConnectionManager } from "./repository/postgreSQL/ConnectionManager";
 
 const { cakeOrderPath } = config.storagePath.csv;
-
+console.log(config.dbConnection)
 
 async function main() {
    const repository = new CakeOrderRepository(cakeOrderPath);
@@ -52,4 +53,17 @@ async function DBSandBox() {
 }
 
 //main();
-DBSandBox();
+//DBSandBox();
+
+
+async function testDBConnection() {
+   try {
+       const connection = await ConnectionManager.getConnection();
+       console.log("✅ Database connected successfully!");
+     
+   } catch (error) {
+       console.error("❌ Database connection failed:", error);
+   }
+}
+
+testDBConnection();
