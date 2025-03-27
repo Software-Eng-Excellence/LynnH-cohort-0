@@ -32,6 +32,14 @@ export interface SQLiteOrder {
   item_id: string;
 }
 
+export interface PostgreSQLOrder{
+  id: string;
+  quantity: number;
+  price: number;
+  item_category: string;
+  item_id: string;
+}
+
 
 
 export class SQLiteOrderMapper implements IMapper<{data:SQLiteOrder,item:IIdentifiableItem}, IdentifiableOrderItem> {

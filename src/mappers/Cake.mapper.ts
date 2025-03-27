@@ -1,6 +1,7 @@
 import { Cake, IIdentifiableCake } from "models/Cake.models";
 import { IMapper } from "./IMaper";
 import { CakeBuilder, IdentifiableCakeBuilder } from "../models/builders/cake.builder";
+import { DbException } from "../util/exceptions/RepositoryException";
 
 
 //index -> property

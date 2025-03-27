@@ -25,7 +25,7 @@ export default {
         },
         sqlite:
             "src/data/orders.sqlite.db",
-        postgreSQL: "src/data/orders.postgresql.db",
+        
        
 
     },

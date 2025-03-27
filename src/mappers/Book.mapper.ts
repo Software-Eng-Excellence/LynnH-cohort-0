@@ -1,6 +1,6 @@
-import { Book } from "models/Book.models";
+import { Book, IdentifiableBook } from "models/Book.models";
 import { IMapper } from "./IMaper";
-import { BookBuilder } from "../models/builders/book.builder";
+import { BookBuilder, IdentifiableBookBuilder } from "../models/builders/book.builder";
 
 export class JSONBookMapper implements IMapper<{ [key: string]: string }, Book> {
     map(data: { [key: string]: string }): Book {
@@ -29,3 +29,47 @@ export class JSONBookMapper implements IMapper<{ [key: string]: string }, Book> 
         };
     }
 }
+
+export interface PostgreSQLBook {
+    id: string;
+    title: string;
+    author: string;
+    genre: string;
+    format: string;
+    language: string;
+    publisher: string;
+    specialEdition: string;
+    packaging: string;
+}
+
+export class PostgreSQLBookMapper implements IMapper<PostgreSQLBook, IdentifiableBook> {
+    map(data: PostgreSQLBook): IdentifiableBook {
+        return IdentifiableBookBuilder.newBuilder().setBook(
+            BookBuilder.newBuilder()
+                .setTitle(data.title)
+                .setAuthor(data.author)
+                .setGenre(data.genre)
+                .setFormat(data.format)
+                .setLanguage(data.language)
+                .setPublisher(data.publisher)
+                .setSpecialEdition(data.specialEdition)
+                .setPackaging(data.packaging)
+                .build()
+        ).setId(data.id).build();
+    }
+    
+    reverseMap(data: IdentifiableBook): PostgreSQLBook {
+        return {
+            id: data.getId(),
+            title: data.getTitle(),
+            author: data.getAuthor(),
+            genre: data.getGenre(),
+            format: data.getFormat(),
+            language: data.getLanguage(),
+            publisher: data.getPublisher(),
+            specialEdition: data.getSpecialEdition(),
+            packaging: data.getPackaging()
+        };
+    }
+}
+
