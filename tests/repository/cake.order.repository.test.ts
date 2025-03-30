@@ -138,10 +138,6 @@ describe("CakeRepository", () => {
             await expect(repository.update(mockCake)).resolves.not.toThrow();
         });
 
-        // it("should rollback the transaction if update fails", async () => {
-        //     (mockDb.query as jest.Mock).mockRejectedValueOnce(new Error("DB Update Error"));
-        //     await expect(repository.update(mockCake)).rejects.toThrow(DbException );
-        // });
     });
 
     describe("Delete Operation", () => {
