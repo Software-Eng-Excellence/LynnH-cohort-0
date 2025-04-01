@@ -4,7 +4,7 @@ import { ConnectionManager } from "./ConnectionManager";
 import logger from "../../util/logger";
 import { DbException, InitializationException } from "../../util/exceptions/RepositoryException";
 import { IIdentifiableOrderItem } from "../../models/IOrder";
-import { PostgreSQLOrder, SQLiteOrder, SQLiteOrderMapper } from "../../mappers/Order.mapper";
+import {  SQLOrder, SQLOrderMapper } from "../../mappers/Order.mapper";
 
 
 
@@ -81,7 +81,7 @@ export class OrderRepository implements IRepository<IIdentifiableOrderItem>, Ini
     async get(id: id): Promise<IIdentifiableOrderItem> {
         try {
             const conn = await ConnectionManager.getConnection();
-            const result = await conn.query<SQLiteOrder>(SELECT_ORDER, [id]);
+            const result = await conn.query<SQLOrder>(SELECT_ORDER, [id]);
             if (!result.rows || result.rows.length === 0) {
                 logger.error("Order of id %s not found", id);
                 throw new Error("Order of id %s not found" + id);
@@ -89,7 +89,7 @@ export class OrderRepository implements IRepository<IIdentifiableOrderItem>, Ini
             const cakeData = result.rows[0]
             const cake = await this.itemRepository.get(cakeData.item_id);
             
-            return new SQLiteOrderMapper().map({ data: cakeData, item: cake });
+            return new SQLOrderMapper().map({ data: cakeData, item: cake });
         } catch (error) {
             logger.error("Failed to get order of id %s %o", id, error as Error);
 
@@ -105,7 +105,7 @@ export class OrderRepository implements IRepository<IIdentifiableOrderItem>, Ini
 
 
             // Query all orders regardless of whether items exist
-            const orders = (await conn.query<SQLiteOrder>(SELECT_ALL, [items.length ? items[0].getCategory() : ""])).rows;
+            const orders = (await conn.query<SQLOrder>(SELECT_ALL, [items.length ? items[0].getCategory() : ""])).rows;
 
             if (orders.length === 0 || items.length === 0) {
                 return [];
@@ -120,7 +120,7 @@ export class OrderRepository implements IRepository<IIdentifiableOrderItem>, Ini
                 return { order, item };
             });
 
-            const mapper = new SQLiteOrderMapper();
+            const mapper = new SQLOrderMapper();
             const identifiableOrders = bindOrders.map(({ order, item }) => mapper.map({ data: order, item }));
             return identifiableOrders;
 

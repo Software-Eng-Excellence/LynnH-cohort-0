@@ -4,7 +4,7 @@ import { ConnectionManager } from "./ConnectionManager";
 import logger from "../../util/logger";
 import { DbException, InitializationException, ItemNotFoundException } from "../../util/exceptions/RepositoryException";
 import { ItemCategory } from "../../models/IItem";
-import { PostgreSQLClothing, PostgreSQLClothingMapper } from "../../mappers/Clothing.mapper";
+import { SQLClothing, SQLClothingMapper } from "../../mappers/Clothing.mapper";
 
 const tableName = ItemCategory.CLOTHING;
 
@@ -114,14 +114,14 @@ export class ClothingRepository implements IRepository<IdentifiableClothing>, In
     async get(id: id): Promise<IdentifiableClothing> {
         try {
             const conn = await ConnectionManager.getConnection();
-            const result = await conn.query<PostgreSQLClothing>(SELECT_CLOTHING, [id]);
+            const result = await conn.query<SQLClothing>(SELECT_CLOTHING, [id]);
 
             if (!result.rows || result.rows.length === 0) {
                 throw new ItemNotFoundException("Clothing item not found");
             }
 
             const clothingData = result.rows[0];
-            return new PostgreSQLClothingMapper().map(clothingData);
+            return new SQLClothingMapper().map(clothingData);
         } catch (error) {
             logger.error("Failed to get clothing item with id %s", id, error as Error);
             throw new DbException("Failed to get clothing item", error as Error);
@@ -131,14 +131,14 @@ export class ClothingRepository implements IRepository<IdentifiableClothing>, In
     async getAll(): Promise<IdentifiableClothing[]> {
         try {
             const conn = await ConnectionManager.getConnection();
-            const result = await conn.query<PostgreSQLClothing>(SELECT_ALL);
+            const result = await conn.query<SQLClothing>(SELECT_ALL);
 
             if (!result.rows || result.rows.length === 0) {
                 logger.warn("No clothing items found in the database.");
                 return [];
             }
 
-            return result.rows.map((row) => new PostgreSQLClothingMapper().map(row));
+            return result.rows.map((row) => new SQLClothingMapper().map(row));
         } catch (error) {
             logger.error("Failed to get all clothing items", error as Error);
             throw new DbException("Failed to get all clothing items", error as Error);

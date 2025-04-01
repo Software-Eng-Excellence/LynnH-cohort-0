@@ -32,7 +32,7 @@ export class CSVClothingMapper implements IMapper<string[], Clothing> {
     }
 }
 
-export interface PostgreSQLClothing {
+export interface SQLClothing {
     id: string;
     type: string;
     size: string;
@@ -46,9 +46,9 @@ export interface PostgreSQLClothing {
 }
 
 
-export class PostgreSQLClothingMapper implements IMapper<PostgreSQLClothing, IdentifiableClothing> {
+export class SQLClothingMapper implements IMapper<SQLClothing, IdentifiableClothing> {
 
-    map(data: PostgreSQLClothing): IdentifiableClothing {
+    map(data: SQLClothing): IdentifiableClothing {
         return IdentifiableClothingBuilder.newBuilder()
             .setClothing(
                 ClothingBuilder.newBuilder()
@@ -68,7 +68,7 @@ export class PostgreSQLClothingMapper implements IMapper<PostgreSQLClothing, Ide
             .build();
     }
 
-    reverseMap(data: IdentifiableClothing): PostgreSQLClothing {
+    reverseMap(data: IdentifiableClothing): SQLClothing {
         return {
             id: data.getId(),
             type: data.getType(),

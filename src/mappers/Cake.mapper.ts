@@ -63,7 +63,7 @@ export interface SQLiteCake  {
     packagingType: string; 
 }
 
-export class SQLiteCakeMapper implements IMapper<SQLiteCake,IIdentifiableCake>{
+export class SQLCakeMapper implements IMapper<SQLiteCake,IIdentifiableCake>{
     map(data: SQLiteCake): IIdentifiableCake {
         return IdentifiableCakeBuilder.newBuilder().setCake(
             CakeBuilder.newBuilder()

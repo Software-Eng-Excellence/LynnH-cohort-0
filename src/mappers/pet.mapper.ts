@@ -26,7 +26,7 @@ export class JSONPetMapper implements IMapper<{ [key: string]: string }, Pet> {
     }
 }
 
-export interface PostgreSQLPet {
+export interface SQLPet {
     id: string;
     productType: string;
     petType: string;
@@ -36,8 +36,8 @@ export interface PostgreSQLPet {
     ecoFriendly: string;
 }
 
-export class PostgreSQLPetMapper implements IMapper<PostgreSQLPet, IdentifiablePet> {
-    map(data: PostgreSQLPet): IdentifiablePet {
+export class SQLPetMapper implements IMapper<SQLPet, IdentifiablePet> {
+    map(data: SQLPet): IdentifiablePet {
         return IdentifiablePetBuilder.newBuilder()
             .setPet(
                 PetBuilder.newBuilder()
@@ -53,7 +53,7 @@ export class PostgreSQLPetMapper implements IMapper<PostgreSQLPet, IdentifiableP
             .build();
     }
 
-    reverseMap(data: IdentifiablePet): PostgreSQLPet {
+    reverseMap(data: IdentifiablePet): SQLPet {
         return {
             id: data.getId(),
             productType: data.getProductType(),

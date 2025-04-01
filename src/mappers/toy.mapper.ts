@@ -26,7 +26,7 @@ export class XMLToyMapper implements IMapper<{ [key: string]: string }, Toy> {
     }
 }
 
-export interface PostgreSQLiteToy {
+export interface SQLToy {
     id: string;
     type: string;
     ageGroup: string;
@@ -38,9 +38,9 @@ export interface PostgreSQLiteToy {
 }
 
 
-export class PostgreSQLiteToyMapper implements IMapper<PostgreSQLiteToy, IdentifiableToy> {
+export class SQLToyMapper implements IMapper<SQLToy, IdentifiableToy> {
     // Maps SQLiteToy data to IdentifiableToy
-    map(data: PostgreSQLiteToy): IdentifiableToy {
+    map(data: SQLToy): IdentifiableToy {
         return IdentifiableToyBuilder.newBuilder()
             .setToy(
                 ToyBuilder.newBuilder()
@@ -55,7 +55,7 @@ export class PostgreSQLiteToyMapper implements IMapper<PostgreSQLiteToy, Identif
             .setId(data.id)
             .build();
     }
-    reverseMap(data: IdentifiableToy): PostgreSQLiteToy {
+    reverseMap(data: IdentifiableToy): SQLToy {
         return {
             id: data.getId(),
             type: data.getType(),

@@ -3,7 +3,7 @@ import { ConnectionManager } from "./ConnectionManager";
 import logger from "../../util/logger";
 import { DbException, InitializationException, ItemNotFoundException } from "../../util/exceptions/RepositoryException";
 import { ItemCategory } from "../../models/IItem";
-import { PostgreSQLPet, PostgreSQLPetMapper } from "../../mappers/pet.mapper";
+import { SQLPet,SQLPetMapper } from "../../mappers/pet.mapper";
 
 const tableName = ItemCategory.PET;
 
@@ -92,11 +92,11 @@ export class PetRepository implements IRepository<any>, Initializable {
     async get(id: id): Promise<any> {
         try {
             const conn = await ConnectionManager.getConnection();
-            const result = await conn.query<PostgreSQLPet>(SELECT_PET, [id]);
+            const result = await conn.query<SQLPet>(SELECT_PET, [id]);
             if (!result.rows || result.rows.length === 0) {
                 throw new ItemNotFoundException("Pet product not found");
             }
-            return new PostgreSQLPetMapper().map(result.rows[0]);
+            return new SQLPetMapper().map(result.rows[0]);
         } catch (error) {
             logger.error("Failed to get pet product of id %s %o", id, error);
             throw new DbException("Failed to get pet product of id " + id, error as Error);
@@ -106,12 +106,12 @@ export class PetRepository implements IRepository<any>, Initializable {
     async getAll(): Promise<any[]> {
         try {
             const conn = await ConnectionManager.getConnection();
-            const result = await conn.query<PostgreSQLPet>(SELECT_ALL);
+            const result = await conn.query<SQLPet>(SELECT_ALL);
             if (!result.rows || result.rows.length === 0) {
                 logger.warn("No pets found in the database.");
                 return [];
             }
-            return result.rows.map((row) => new PostgreSQLPetMapper().map(row));
+            return result.rows.map((row) => new SQLPetMapper().map(row));
         } catch (error) {
             logger.error("Failed to get all pet products", error);
             throw new DbException("Failed to get all pet products", error as Error);

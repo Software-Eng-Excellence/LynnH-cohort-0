@@ -30,7 +30,7 @@ export class JSONBookMapper implements IMapper<{ [key: string]: string }, Book> 
     }
 }
 
-export interface PostgreSQLBook {
+export interface SQLBook {
     id: string;
     title: string;
     author: string;
@@ -42,8 +42,8 @@ export interface PostgreSQLBook {
     packaging: string;
 }
 
-export class PostgreSQLBookMapper implements IMapper<PostgreSQLBook, IdentifiableBook> {
-    map(data: PostgreSQLBook): IdentifiableBook {
+export class PostgreSQLBookMapper implements IMapper<SQLBook, IdentifiableBook> {
+    map(data:SQLBook): IdentifiableBook {
         return IdentifiableBookBuilder.newBuilder().setBook(
             BookBuilder.newBuilder()
                 .setTitle(data.title)
@@ -58,7 +58,7 @@ export class PostgreSQLBookMapper implements IMapper<PostgreSQLBook, Identifiabl
         ).setId(data.id).build();
     }
     
-    reverseMap(data: IdentifiableBook): PostgreSQLBook {
+    reverseMap(data: IdentifiableBook): SQLBook {
         return {
             id: data.getId(),
             title: data.getTitle(),

@@ -4,7 +4,7 @@ import { ConnectionManager } from "./ConnectionManager";
 import logger from "../../util/logger";
 import { DbException, InitializationException, ItemNotFoundException } from "../../util/exceptions/RepositoryException";
 import { ItemCategory } from "../../models/IItem";
-import { PostgreSQLiteToy, PostgreSQLiteToyMapper } from "../../mappers/toy.mapper";
+import { SQLToy, SQLToyMapper } from "../../mappers/toy.mapper";
 
 const tableName = ItemCategory.TOY;
 const CREATE_TABLE = `
@@ -28,20 +28,20 @@ INSERT INTO ${tableName} (
 const SELECT_TOY = `SELECT
     id,
     type,
-    ageGroup AS "ageGroup",
+    agegroup AS "ageGroup",
     brand,
     material,
-    batteryRequired AS "batteryRequired",
+    batteryrequired AS "batteryRequired",
     educational
 FROM ${tableName} WHERE id = $1;`;
 
 const SELECT_ALL = `SELECT
     id,
     type,
-    ageGroup AS "ageGroup",
+    agegroup AS "ageGroup",
     brand,
     material,
-    batteryRequired AS "batteryRequired",
+    batteryrequired AS "batteryRequired",
     educational
 FROM ${tableName}`;
 
@@ -96,14 +96,14 @@ export class ToyRepository implements IRepository<IdentifiableToy>, Initializabl
     async get(id: id): Promise<IdentifiableToy> {
         try {
             const conn = await ConnectionManager.getConnection();
-            const result = await conn.query<PostgreSQLiteToy>(SELECT_TOY, [id]);
+            const result = await conn.query<SQLToy>(SELECT_TOY, [id]);
 
             if (!result.rows || result.rows.length === 0) {
                 throw new ItemNotFoundException("Toy item not found");
             }
 
             const toyData = result.rows[0];
-            return new PostgreSQLiteToyMapper().map(toyData);
+            return new SQLToyMapper().map(toyData);
         } catch (error) {
             logger.error("Failed to get toy with id %s %o", id, error as Error);
             throw new DbException("Failed to get toy with id " + id, error as Error);
@@ -113,14 +113,14 @@ export class ToyRepository implements IRepository<IdentifiableToy>, Initializabl
     async getAll(): Promise<IdentifiableToy[]> {
         try {
             const conn = await ConnectionManager.getConnection();
-            const result = await conn.query<PostgreSQLiteToy>(SELECT_ALL);
+            const result = await conn.query<SQLToy>(SELECT_ALL);
 
             if (!result.rows || result.rows.length === 0) {
                 logger.warn("No toys found in the database.");
                 return [];
             }
 
-            return result.rows.map((row) => new PostgreSQLiteToyMapper().map(row));
+            return result.rows.map((row) => new SQLToyMapper().map(row));
         } catch (error) {
             logger.error("Failed to get all toys %o", error as Error);
             throw new DbException("Failed to get all toys", error as Error);

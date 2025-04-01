@@ -4,7 +4,7 @@ import { ConnectionManager } from "./ConnectionManager";
 import logger from "../../util/logger";
 import { DbException, InitializationException, ItemNotFoundException } from "../../util/exceptions/RepositoryException";
 import { ItemCategory } from "../../models/IItem";
-import { SQLiteCake, SQLiteCakeMapper } from "../../mappers/Cake.mapper";
+import { SQLiteCake, SQLCakeMapper } from "../../mappers/Cake.mapper";
 
 const tableName = ItemCategory.CAKE;
 const CREATE_TABLE = `
@@ -149,7 +149,7 @@ export class CakeRepository implements IRepository<IIdentifiableCake>, Initializ
 
             const cakeData = result.rows[0];
 
-            return new SQLiteCakeMapper().map(cakeData);
+            return new SQLCakeMapper().map(cakeData);
         } catch (error) {
             logger.error("Failed to get cake of id %s %o", id, error as Error);
 
@@ -167,7 +167,7 @@ export class CakeRepository implements IRepository<IIdentifiableCake>, Initializ
                 return [];
             }
 
-            return result.rows.map((row) => new SQLiteCakeMapper().map(row));
+            return result.rows.map((row) => new SQLCakeMapper().map(row));
         } catch (error) {
             logger.error("Failed to get all cakes %o", error as Error);
             throw new DbException("Failed to get all cakes", error as Error);

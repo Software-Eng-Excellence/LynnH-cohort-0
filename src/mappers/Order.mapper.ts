@@ -24,15 +24,7 @@ export class CSVOrderMapper implements IMapper<string[], IOrder> {
   }
 }
 
-export interface SQLiteOrder {
-  id: string;
-  quantity: number;
-  price: number;
-  item_category: string;
-  item_id: string;
-}
-
-export interface PostgreSQLOrder{
+export interface SQLOrder {
   id: string;
   quantity: number;
   price: number;
@@ -41,15 +33,14 @@ export interface PostgreSQLOrder{
 }
 
 
-
-export class SQLiteOrderMapper implements IMapper<{data:SQLiteOrder,item:IIdentifiableItem}, IdentifiableOrderItem> {
+export class SQLOrderMapper implements IMapper<{data:SQLOrder,item:IIdentifiableItem}, IdentifiableOrderItem> {
   
-  map({data,item}:{data:SQLiteOrder,item:IIdentifiableItem}): IdentifiableOrderItem {
+  map({data,item}:{data:SQLOrder,item:IIdentifiableItem}): IdentifiableOrderItem {
 
     const order = OrderBuilder.newBuilder().setId(data.id).setPrice(data.price).setQuantity(data.quantity).setItem(item).build();
     return IdentifiableOrderItemBuilder.newBuilder().setOrder(order).setItem(item).build();
   }
-  reverseMap(data: IdentifiableOrderItem): { data: SQLiteOrder, item: IIdentifiableItem } {
+  reverseMap(data: IdentifiableOrderItem): { data: SQLOrder, item: IIdentifiableItem } {
   return{
     data:{
       id:data.getId(),

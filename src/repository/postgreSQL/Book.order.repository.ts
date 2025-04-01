@@ -4,7 +4,7 @@ import { ConnectionManager } from "./ConnectionManager";
 import logger from "../../util/logger";
 import { DbException, InitializationException, ItemNotFoundException } from "../../util/exceptions/RepositoryException";
 import { ItemCategory } from "../../models/IItem";
-import { PostgreSQLBook, PostgreSQLBookMapper } from "../../mappers/Book.mapper";
+import { SQLBook, PostgreSQLBookMapper } from "../../mappers/Book.mapper";
 
 const tableName = ItemCategory.BOOK;
 const CREATE_TABLE = `
@@ -36,7 +36,7 @@ SELECT
     format, 
     language, 
     publisher, 
-    specialEdition AS "specialEdition", 
+    specialedition AS "specialEdition", 
     packaging 
 FROM ${tableName} 
 WHERE id = $1`;
@@ -50,7 +50,7 @@ SELECT
     format, 
     language, 
     publisher, 
-    specialEdition AS "specialEdition", 
+    specialedition AS "specialEdition", 
     packaging 
 FROM ${tableName}`;
 
@@ -104,7 +104,7 @@ export class BookRepository implements IRepository<IdentifiableBook>, Initializa
     async get(id: id): Promise<IdentifiableBook> {
         try {
             const conn = await ConnectionManager.getConnection();
-            const result = await conn.query<PostgreSQLBook>(SELECT_BOOK, [id]);
+            const result = await conn.query<SQLBook>(SELECT_BOOK, [id]);
             if (!result.rows || result.rows.length === 0) {
                 throw new ItemNotFoundException("Book not found");
             }
@@ -118,7 +118,7 @@ export class BookRepository implements IRepository<IdentifiableBook>, Initializa
     async getAll(): Promise<IdentifiableBook[]> {
         try {
             const conn = await ConnectionManager.getConnection();
-            const result = await conn.query<PostgreSQLBook>(SELECT_ALL);
+            const result = await conn.query<SQLBook>(SELECT_ALL);
             if (!result.rows || result.rows.length === 0) {
                 logger.warn("No books found in the database.");
                 return [];

@@ -4,7 +4,7 @@ import { ConnectionManager } from "./ConnectionManager";
 import logger from "../../util/logger";
 import { DbException, InitializationException, ItemNotFoundException } from "../../util/exceptions/RepositoryException";
 import { ItemCategory } from "../../models/IItem";
-import { PostgreSQLFurniture, PostgreSQLFurnitureMapper } from "../../mappers/furniture.mapper";
+import { SQLFurniture, SQLFurnitureMapper } from "../../mappers/furniture.mapper";
 
 
 const tableName = ItemCategory.FURNITURE;
@@ -98,14 +98,14 @@ export class FurnitureRepository implements IRepository<IdentifiableFurniture>, 
     async get(id: id): Promise<IdentifiableFurniture> {
         try {
             const conn = await ConnectionManager.getConnection();
-            const result = await conn.query<PostgreSQLFurniture>(SELECT_FURNITURE, [id]);
+            const result = await conn.query<SQLFurniture>(SELECT_FURNITURE, [id]);
 
             if (!result.rows || result.rows.length === 0) {
                 throw new ItemNotFoundException("Furniture item not found");
             }
 
             const furnitureData = result.rows[0];
-            return new PostgreSQLFurnitureMapper().map(furnitureData);
+            return new SQLFurnitureMapper().map(furnitureData);
         } catch (error) {
             logger.error("Failed to get furniture with id %s %o", id, error as Error);
             throw new DbException("Failed to get furniture with id " + id, error as Error);
@@ -115,14 +115,14 @@ export class FurnitureRepository implements IRepository<IdentifiableFurniture>, 
     async getAll(): Promise<IdentifiableFurniture[]> {
         try {
             const conn = await ConnectionManager.getConnection();
-            const result = await conn.query<PostgreSQLFurniture>(SELECT_ALL);
+            const result = await conn.query<SQLFurniture>(SELECT_ALL);
 
             if (!result.rows || result.rows.length === 0) {
                 logger.warn("No furniture found in the database.");
                 return [];
             }
 
-            return result.rows.map((row) => new PostgreSQLFurnitureMapper().map(row));
+            return result.rows.map((row) => new SQLFurnitureMapper().map(row));
         } catch (error) {
             logger.error("Failed to get all furniture %o", error as Error);
             throw new DbException("Failed to get all furniture", error as Error);

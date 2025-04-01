@@ -28,7 +28,7 @@ export class XMLFurnitureMapper implements IMapper<{ [key: string]: string }, Fu
     }
 }
 
-export interface PostgreSQLFurniture {
+export interface SQLFurniture {
     id: string;
     type: string;
     material: string;
@@ -40,10 +40,10 @@ export interface PostgreSQLFurniture {
 }
 
 
-export class PostgreSQLFurnitureMapper implements IMapper<PostgreSQLFurniture, IdentifiableFurniture> {
+export class SQLFurnitureMapper implements IMapper<SQLFurniture, IdentifiableFurniture> {
 
-    // Method to map PostgreSQLFurniture to IdentifiableFurniture
-    map(data: PostgreSQLFurniture): IdentifiableFurniture {
+    // Method to map SQLFurniture to IdentifiableFurniture
+    map(data: SQLFurniture): IdentifiableFurniture {
         return IdentifiableFurnitureBuilder.newBuilder()
             .setFurniture(
                 FurnitureBuilder.newBuilder()
@@ -60,8 +60,8 @@ export class PostgreSQLFurnitureMapper implements IMapper<PostgreSQLFurniture, I
             .build();
     }
 
-    // Method to reverse map IdentifiableFurniture to PostgreSQLFurniture
-    reverseMap(data: IdentifiableFurniture): PostgreSQLFurniture {
+    // Method to reverse map IdentifiableFurniture to SQLFurniture
+    reverseMap(data: IdentifiableFurniture): SQLFurniture {
         return {
             id: data.getId(),
             type: data.getType(),

@@ -4,7 +4,7 @@ import logger from "../../util/logger";
 import { ConnectionManager } from "./ConnectionManager";
 import { IIdentifiableItem } from "models/IItem";
 import { IIdentifiableOrderItem } from "models/IOrder";
-import { SQLiteOrder, SQLiteOrderMapper } from "../../mappers/Order.mapper";
+import { SQLOrder, SQLOrderMapper } from "../../mappers/Order.mapper";
 
 
 const CREATE_TABLE = `CREATE TABLE IF NOT EXISTS "orders"(
@@ -80,14 +80,14 @@ export class OrderRepository implements IRepository<IIdentifiableOrderItem>, Ini
     async get(id: id): Promise<IIdentifiableOrderItem> {
         try {
             const conn = await ConnectionManager.getConnection();
-            const result = await conn.get<SQLiteOrder>(SELECT_ORDER, id);
+            const result = await conn.get<SQLOrder>(SELECT_ORDER, id);
             if (!result) {
                 logger.error("Order of id %s not found", id);
                 throw new Error("Order of id %s not found" + id);
             }
             const cake = await this.itemRepository.get(result.item_id);
 
-            return new SQLiteOrderMapper().map({ data: result, item: cake });
+            return new SQLOrderMapper().map({ data: result, item: cake });
         } catch (error) {
             logger.error("Failed to get order of id %s %o", id, error as Error);
 
@@ -104,7 +104,7 @@ export class OrderRepository implements IRepository<IIdentifiableOrderItem>, Ini
                 return [];
             }
 
-            const orders = await conn.all<SQLiteOrder[]>(SELECT_ALL, items[0].getCategory());
+            const orders = await conn.all<SQLOrder[]>(SELECT_ALL, items[0].getCategory());
 
             const bindOrders = orders.map((order) => {
                 const item = items.find((item) => item.getId() === order.item_id);
@@ -114,7 +114,7 @@ export class OrderRepository implements IRepository<IIdentifiableOrderItem>, Ini
                 return { order, item };
             });
 
-            const mapper = new SQLiteOrderMapper();
+            const mapper = new SQLOrderMapper();
             const identifiableOrders = bindOrders.map(({ order, item }) => {
                 return mapper.map({ data: order, item });
             });
@@ -153,6 +153,7 @@ export class OrderRepository implements IRepository<IIdentifiableOrderItem>, Ini
         try {
             conn = await ConnectionManager.getConnection();
             conn.exec("BEGIN TRANSACTION")
+            const item_id = await this.itemRepository.delete(id)
             await conn.run(DELETE_ID,
                 id
             );
