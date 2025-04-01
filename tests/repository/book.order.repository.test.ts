@@ -1,4 +1,4 @@
-import { BookRepository } from "../../src/repository/postgreSQL/Book.order.repository";
+import { PostgreSQLBookRepository } from "../../src/repository/postgreSQL/Book.order.repository";
 import { ConnectionManager } from "../../src/repository/postgreSQL/ConnectionManager";
 import { IdentifiableBook } from "../../src/models/Book.models";
 import { DbException, InitializationException } from "../../src/util/exceptions/RepositoryException";
@@ -36,10 +36,10 @@ const mockBook: IdentifiableBook = new IdentifiableBook(
 );
 
 describe("BookRepository", () => {
-    let repository: BookRepository;
+    let repository: PostgreSQLBookRepository;
 
     beforeEach(() => {
-        repository = new BookRepository();
+        repository = new PostgreSQLBookRepository();
         jest.clearAllMocks();
     });
 

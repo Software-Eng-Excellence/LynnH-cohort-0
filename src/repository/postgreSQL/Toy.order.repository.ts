@@ -5,6 +5,13 @@ import logger from "../../util/logger";
 import { DbException, InitializationException, ItemNotFoundException } from "../../util/exceptions/RepositoryException";
 import { ItemCategory } from "../../models/IItem";
 import { SQLToy, SQLToyMapper } from "../../mappers/toy.mapper";
+import { DataSourceType, MapperFactory } from "../../mappers/MapperFactory";
+
+
+const mapper = MapperFactory.create<SQLToy, IdentifiableToy>(
+    DataSourceType.POSTGRESQL,
+    ItemCategory.TOY
+);
 
 const tableName = ItemCategory.TOY;
 const CREATE_TABLE = `
@@ -58,7 +65,7 @@ SET
 WHERE id = $7;
 `;
 
-export class ToyRepository implements IRepository<IdentifiableToy>, Initializable {
+export class PostgreSQLToyRepository implements IRepository<IdentifiableToy>, Initializable {
     async init() {
         try {
             const conn = await ConnectionManager.getConnection();
@@ -103,7 +110,7 @@ export class ToyRepository implements IRepository<IdentifiableToy>, Initializabl
             }
 
             const toyData = result.rows[0];
-            return new SQLToyMapper().map(toyData);
+            return mapper.map(toyData);
         } catch (error) {
             logger.error("Failed to get toy with id %s %o", id, error as Error);
             throw new DbException("Failed to get toy with id " + id, error as Error);
@@ -120,7 +127,7 @@ export class ToyRepository implements IRepository<IdentifiableToy>, Initializabl
                 return [];
             }
 
-            return result.rows.map((row) => new SQLToyMapper().map(row));
+            return result.rows.map((row) => mapper.map(row));
         } catch (error) {
             logger.error("Failed to get all toys %o", error as Error);
             throw new DbException("Failed to get all toys", error as Error);

@@ -1,4 +1,4 @@
-import { FurnitureRepository } from "../../src/repository/postgreSQL/Furniture.order.repository";
+import { PostgreSQLFurnitureRepository } from "../../src/repository/postgreSQL/Furniture.order.repository";
 import { ConnectionManager } from "../../src/repository/postgreSQL/ConnectionManager";
 import { IdentifiableFurniture } from "../../src/models/Furniture.models";
 import { DbException, InitializationException } from "../../src/util/exceptions/RepositoryException";
@@ -35,11 +35,11 @@ const mockFurniture: IdentifiableFurniture = new IdentifiableFurniture(
     "5 Years"         // warranty
 );
 
-describe("FurnitureRepository", () => {
-    let repository: FurnitureRepository;
+describe("PostgreSQLFurnitureRepository", () => {
+    let repository: PostgreSQLFurnitureRepository;
 
     beforeEach(() => {
-        repository = new FurnitureRepository();
+        repository = new PostgreSQLFurnitureRepository();
         jest.clearAllMocks();
     });
 

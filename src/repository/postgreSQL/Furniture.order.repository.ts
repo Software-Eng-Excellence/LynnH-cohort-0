@@ -5,7 +5,13 @@ import logger from "../../util/logger";
 import { DbException, InitializationException, ItemNotFoundException } from "../../util/exceptions/RepositoryException";
 import { ItemCategory } from "../../models/IItem";
 import { SQLFurniture, SQLFurnitureMapper } from "../../mappers/furniture.mapper";
+import { DataSourceType, MapperFactory } from "../../mappers/MapperFactory";
 
+
+  const mapper = MapperFactory.create<SQLFurniture, IdentifiableFurniture>(
+                DataSourceType.POSTGRESQL,
+                ItemCategory.FURNITURE
+            );
 
 const tableName = ItemCategory.FURNITURE;
 const CREATE_TABLE = `
@@ -62,7 +68,7 @@ SET
 WHERE id = $8;
 `;
 
-export class FurnitureRepository implements IRepository<IdentifiableFurniture>, Initializable {
+export class PostgreSQLFurnitureRepository implements IRepository<IdentifiableFurniture>, Initializable {
     async init() {
         try {
             const conn = await ConnectionManager.getConnection();
@@ -105,7 +111,7 @@ export class FurnitureRepository implements IRepository<IdentifiableFurniture>, 
             }
 
             const furnitureData = result.rows[0];
-            return new SQLFurnitureMapper().map(furnitureData);
+            return mapper.map(furnitureData);
         } catch (error) {
             logger.error("Failed to get furniture with id %s %o", id, error as Error);
             throw new DbException("Failed to get furniture with id " + id, error as Error);
@@ -122,7 +128,7 @@ export class FurnitureRepository implements IRepository<IdentifiableFurniture>, 
                 return [];
             }
 
-            return result.rows.map((row) => new SQLFurnitureMapper().map(row));
+            return result.rows.map((row) => mapper.map(row));
         } catch (error) {
             logger.error("Failed to get all furniture %o", error as Error);
             throw new DbException("Failed to get all furniture", error as Error);
