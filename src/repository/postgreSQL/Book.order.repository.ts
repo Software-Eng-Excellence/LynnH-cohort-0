@@ -4,7 +4,7 @@ import { ConnectionManager } from "./ConnectionManager";
 import logger from "../../util/logger";
 import { DbException, InitializationException, ItemNotFoundException } from "../../util/exceptions/RepositoryException";
 import { ItemCategory } from "../../models/IItem";
-import { SQLBook, PostgreSQLBookMapper } from "../../mappers/Book.mapper";
+import { SQLBook } from "../../mappers/Book.mapper";
 import { DataSourceType, MapperFactory } from "../../mappers/MapperFactory";
 
 const mapper = MapperFactory.create<SQLBook, IdentifiableBook>(

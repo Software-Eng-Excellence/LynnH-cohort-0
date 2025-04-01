@@ -1,10 +1,10 @@
-import { JSONBookMapper, PostgreSQLBookMapper } from "../../src/mappers/Book.mapper";
-import { CSVCakeMapper, SQLiteCakeMapper } from "../../src/mappers/Cake.mapper";
-import { CSVClothingMapper, PostgreSQLClothingMapper } from "../../src/mappers/Clothing.mapper";
-import { PostgreSQLFurnitureMapper, XMLFurnitureMapper } from "../../src/mappers/furniture.mapper";
+import { JSONBookMapper, SQLBookMapper } from "../../src/mappers/Book.mapper";
+import { CSVCakeMapper, SQLCakeMapper } from "../../src/mappers/Cake.mapper";
+import { CSVClothingMapper, SQLClothingMapper } from "../../src/mappers/Clothing.mapper";
+import { SQLFurnitureMapper, XMLFurnitureMapper } from "../../src/mappers/furniture.mapper";
 import { DataSourceType, MapperFactory } from "../../src/mappers/MapperFactory";
-import { JSONPetMapper, PostgreSQLPetMapper } from "../../src/mappers/pet.mapper";
-import { PostgreSQLToyMapper, XMLToyMapper } from "../../src/mappers/toy.mapper";
+import { JSONPetMapper, SQLPetMapper } from "../../src/mappers/pet.mapper";
+import { SQLToyMapper, XMLToyMapper } from "../../src/mappers/toy.mapper";
 import { ItemCategory } from "../../src/models/IItem";
 
 describe('MapperFactory - FILE DataSource', () => {
@@ -46,34 +46,34 @@ describe('MapperFactory - FILE DataSource', () => {
 });
 
 describe('MapperFactory - POSTGRESQL DataSource', () => {
-  it('should return PostgreSQLPetMapper for DataSourceType.POSTGRESQL and ItemCategory.PET', () => {
+  it('should return SQLPetMapper for DataSourceType.POSTGRESQL and ItemCategory.PET', () => {
     const mapper = MapperFactory.create(DataSourceType.POSTGRESQL, ItemCategory.PET);
-    expect(mapper).toBeInstanceOf(PostgreSQLPetMapper);
+    expect(mapper).toBeInstanceOf(SQLPetMapper);
   });
 
-  it('should return PostgreSQLToyMapper for DataSourceType.POSTGRESQL and ItemCategory.TOY', () => {
+  it('should return SQLToyMapper for DataSourceType.POSTGRESQL and ItemCategory.TOY', () => {
     const mapper = MapperFactory.create(DataSourceType.POSTGRESQL, ItemCategory.TOY);
-    expect(mapper).toBeInstanceOf(PostgreSQLToyMapper);
+    expect(mapper).toBeInstanceOf(SQLToyMapper);
   });
 
-  it('should return PostgreSQLClothingMapper for DataSourceType.POSTGRESQL and ItemCategory.CLOTHING', () => {
+  it('should return SQLClothingMapper for DataSourceType.POSTGRESQL and ItemCategory.CLOTHING', () => {
     const mapper = MapperFactory.create(DataSourceType.POSTGRESQL, ItemCategory.CLOTHING);
-    expect(mapper).toBeInstanceOf(PostgreSQLClothingMapper);
+    expect(mapper).toBeInstanceOf(SQLClothingMapper);
   });
 
-  it('should return PostgreSQLBookMapper for DataSourceType.POSTGRESQL and ItemCategory.BOOK', () => {
+  it('should return SQLBookMapper for DataSourceType.POSTGRESQL and ItemCategory.BOOK', () => {
     const mapper = MapperFactory.create(DataSourceType.POSTGRESQL, ItemCategory.BOOK);
-    expect(mapper).toBeInstanceOf(PostgreSQLBookMapper);
+    expect(mapper).toBeInstanceOf(SQLBookMapper);
   });
 
-  it('should return PostgreSQLFurnitureMapper for DataSourceType.POSTGRESQL and ItemCategory.FURNITURE', () => {
+  it('should return SQLFurnitureMapper for DataSourceType.POSTGRESQL and ItemCategory.FURNITURE', () => {
     const mapper = MapperFactory.create(DataSourceType.POSTGRESQL, ItemCategory.FURNITURE);
-    expect(mapper).toBeInstanceOf(PostgreSQLFurnitureMapper);
+    expect(mapper).toBeInstanceOf(SQLFurnitureMapper);
   });
 
-  it('should return SQLiteCakeMapper for DataSourceType.POSTGRESQL and ItemCategory.CAKE', () => {
+  it('should return SQLCakeMapper for DataSourceType.POSTGRESQL and ItemCategory.CAKE', () => {
     const mapper = MapperFactory.create(DataSourceType.POSTGRESQL, ItemCategory.CAKE);
-    expect(mapper).toBeInstanceOf(SQLiteCakeMapper);
+    expect(mapper).toBeInstanceOf(SQLCakeMapper);
   });
 
   it('should throw an error for an unsupported category with POSTGRESQL data source', () => {

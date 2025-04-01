@@ -1,11 +1,11 @@
 import { ItemCategory } from "../models/IItem";
 import { IMapper } from "../mappers/IMaper";
-import { JSONPetMapper, PostgreSQLPet, PostgreSQLPetMapper } from "./pet.mapper";
-import { PostgreSQLToy, PostgreSQLToyMapper, XMLToyMapper } from "./toy.mapper";
-import { CSVClothingMapper, PostgreSQLClothing, PostgreSQLClothingMapper } from "./Clothing.mapper";
-import { CSVCakeMapper, SQLiteCake, SQLiteCakeMapper } from "./Cake.mapper";
-import { PostgreSQLFurniture, PostgreSQLFurnitureMapper, XMLFurnitureMapper } from "./furniture.mapper";
-import { JSONBookMapper, PostgreSQLBook, PostgreSQLBookMapper } from "./Book.mapper";
+import { JSONPetMapper, SQLPet, SQLPetMapper } from "./pet.mapper";
+import { SQLToy, SQLToyMapper, XMLToyMapper } from "./toy.mapper";
+import { CSVClothingMapper, SQLClothing, SQLClothingMapper } from "./Clothing.mapper";
+import { CSVCakeMapper, SQLiteCake, SQLCakeMapper } from "./Cake.mapper";
+import { SQLFurniture, SQLFurnitureMapper, XMLFurnitureMapper } from "./furniture.mapper";
+import { JSONBookMapper, SQLBook, SQLBookMapper } from "./Book.mapper";
 import { IdentifiablePet } from "../models/Pet.models";
 import { IIdentifiableCake } from "../models/Cake.models";
 import { IdentifiableFurniture } from "../models/Furniture.models";
@@ -43,17 +43,17 @@ export class MapperFactory {
                 let mapper: IMapper<T, U>;
                 switch (category) {
                     case ItemCategory.PET:
-                        return new PostgreSQLPetMapper() as IMapper<PostgreSQLPet, IdentifiablePet> as IMapper<T, U>;
+                        return new SQLPetMapper() as IMapper<SQLPet, IdentifiablePet> as IMapper<T, U>;
                     case ItemCategory.TOY:
-                        return new PostgreSQLToyMapper() as IMapper<PostgreSQLToy, IdentifiableToy> as IMapper<T, U>;
+                        return new SQLToyMapper() as IMapper<SQLToy, IdentifiableToy> as IMapper<T, U>;
                     case ItemCategory.CLOTHING:
-                        return new PostgreSQLClothingMapper() as IMapper<PostgreSQLClothing, IdentifiableClothing> as IMapper<T, U>;
+                        return new SQLClothingMapper() as IMapper<SQLClothing, IdentifiableClothing> as IMapper<T, U>;
                     case ItemCategory.BOOK:
-                        return new PostgreSQLBookMapper() as IMapper<PostgreSQLBook, IdentifiableBook> as IMapper<T, U>;
+                        return new SQLBookMapper() as IMapper<SQLBook, IdentifiableBook> as IMapper<T, U>;
                     case ItemCategory.FURNITURE:
-                        return new PostgreSQLFurnitureMapper() as IMapper<PostgreSQLFurniture, IdentifiableFurniture> as IMapper<T, U>;
+                        return new SQLFurnitureMapper() as IMapper<SQLFurniture, IdentifiableFurniture> as IMapper<T, U>;
                     case ItemCategory.CAKE:
-                        return new SQLiteCakeMapper() as IMapper<SQLiteCake, IIdentifiableCake> as IMapper<T, U>;
+                        return new SQLCakeMapper() as IMapper<SQLiteCake, IIdentifiableCake> as IMapper<T, U>;
                     default:
                         throw new Error("Unsupported category for PostgreSQL");
                 }

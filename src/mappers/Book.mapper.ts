@@ -42,7 +42,7 @@ export interface SQLBook {
     packaging: string;
 }
 
-export class PostgreSQLBookMapper implements IMapper<SQLBook, IdentifiableBook> {
+export class SQLBookMapper implements IMapper<SQLBook, IdentifiableBook> {
     map(data:SQLBook): IdentifiableBook {
         return IdentifiableBookBuilder.newBuilder().setBook(
             BookBuilder.newBuilder()
