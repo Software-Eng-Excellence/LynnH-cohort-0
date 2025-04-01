@@ -10,12 +10,6 @@ import { IdentifiableToyBuilder, ToyBuilder } from "./models/builders/toy.builde
 import { FurnitureBuilder, IdentifiableFurnitureBuilder } from "./models/builders/furniture.builder";
 import { DBMode, RepositoryFactory } from "./repository/RepositoryFactory";
 import { ItemCategory } from "./models/IItem";
-import { PostgreSQLOrderRepository } from "./repository/postgreSQL/Order.repository";
-import { PostgreSQLBookRepository } from "./repository/postgreSQL/Book.order.repository";
-import { PostgreSQLPetRepository } from "./repository/postgreSQL/Pet.order.repository";
-import { PostgreSQLClothingRepository } from "./repository/postgreSQL/Clothing.order.repository";
-import { PostgreSQLToyRepository } from "./repository/postgreSQL/Toy.order.repository";
-import { PostgreSQLFurnitureRepository } from "./repository/postgreSQL/Furniture.order.repository";
 
 const { cakeOrderPath } = config.storagePath.csv;
 
@@ -59,7 +53,7 @@ async function DBSandBox() {
    await dbOrder.create(idOrder);
    await dbOrder.delete(idOrder.getId());
    await dbOrder.update(idOrder);
-   console.log("example", (await dbOrder.getAll()).length)
+   console.log( (await dbOrder.getAll()).length)
 }
 
 //main();
@@ -103,7 +97,7 @@ async function postgreSQLConnection() {
 
    //await dbOrder.update(idOrder);
    //await dbOrder.delete(idOrder.getId());
-   console.log("example", (await dbOrder.getAll()).length)
+   console.log( (await dbOrder.getAll()).length)
 }
 
 //postgreSQLConnection();
