@@ -1,4 +1,5 @@
-import { IItem, ItemCategory } from "./IItem";
+import { id } from "repository/IRepository";
+import { IIdentifiableItem, IItem, ItemCategory } from "./IItem";
 
 export class Pet implements IItem{
 
@@ -50,5 +51,25 @@ export class Pet implements IItem{
 
     getEcoFriendly(): string {
         return this.ecoFriendly;
+    }
+}
+
+export class IdentifiablePet extends Pet implements IIdentifiableItem {
+    
+    constructor(
+        private id: id,
+        productType: string,
+        petType: string,
+        brand: string,
+        size: string,
+        flavor: string,
+        ecoFriendly: string
+    ) {
+        super(productType, petType, brand, size, flavor, ecoFriendly);
+        
+    }
+
+    getId(): id {
+        return this.id;
     }
 }

@@ -24,8 +24,18 @@ export default {
             toyOrdersPath: process.env.TOY_ORDERS_PATH || "",
         },
         sqlite:
-           "src/data/orders.db"
+            "src/data/orders.sqlite.db",
         
+       
+
+    },
+    dbConnection:{
+        dbUser: process.env.DBUSER,
+        dbHost:process.env.DBHOST,
+        dbPort:parseInt(process.env.DBPORT || "5432", 10),
+        dbDatabase:process.env.DBDATABASE,
+        dbPassword:process.env.DBPASSWORD
+
 
     }
 

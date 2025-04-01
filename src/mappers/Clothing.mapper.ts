@@ -1,6 +1,6 @@
-import { Clothing } from "models/Clothing.models";
+import { Clothing, IdentifiableClothing } from "models/Clothing.models";
 import { IMapper } from "./IMaper";
-import { ClothingBuilder } from "../models/builders/clothing.builder";
+import { ClothingBuilder, IdentifiableClothingBuilder } from "../models/builders/clothing.builder";
 
 export class CSVClothingMapper implements IMapper<string[], Clothing> {
     map(data: string[]): Clothing {
@@ -29,5 +29,57 @@ export class CSVClothingMapper implements IMapper<string[], Clothing> {
             clothing.getPackaging(),
             clothing.getSpecialRequest()
         ];
+    }
+}
+
+export interface SQLClothing {
+    id: string;
+    type: string;
+    size: string;
+    color: string;
+    material: string;
+    pattern: string;
+    brand: string;
+    gender: string;
+    packaging: string;
+    specialRequest: string;
+}
+
+
+export class SQLClothingMapper implements IMapper<SQLClothing, IdentifiableClothing> {
+
+    map(data: SQLClothing): IdentifiableClothing {
+        return IdentifiableClothingBuilder.newBuilder()
+            .setClothing(
+                ClothingBuilder.newBuilder()
+                  
+                    .setType(data.type)
+                    .setSize(data.size)
+                    .setColor(data.color)
+                    .setMaterial(data.material)
+                    .setPattern(data.pattern)
+                    .setBrand(data.brand)
+                    .setGender(data.gender)
+                    .setPackaging(data.packaging)
+                    .setSpecialRequest(data.specialRequest)
+                    .build()
+            )
+            .setId(data.id)
+            .build();
+    }
+
+    reverseMap(data: IdentifiableClothing): SQLClothing {
+        return {
+            id: data.getId(),
+            type: data.getType(),
+            size: data.getSize(),
+            color: data.getColor(),
+            material: data.getMaterial(),
+            pattern: data.getPattern(),
+            brand: data.getBrand(),
+            gender: data.getGender(),
+            packaging: data.getPackaging(),
+            specialRequest: data.getSpecialRequest()
+        };
     }
 }

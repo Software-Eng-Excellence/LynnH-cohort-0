@@ -1,6 +1,7 @@
 import { Cake, IIdentifiableCake } from "models/Cake.models";
 import { IMapper } from "./IMaper";
 import { CakeBuilder, IdentifiableCakeBuilder } from "../models/builders/cake.builder";
+import { DbException } from "../util/exceptions/RepositoryException";
 
 
 //index -> property
@@ -62,7 +63,7 @@ export interface SQLiteCake  {
     packagingType: string; 
 }
 
-export class SQLiteCakeMapper implements IMapper<SQLiteCake,IIdentifiableCake>{
+export class SQLCakeMapper implements IMapper<SQLiteCake,IIdentifiableCake>{
     map(data: SQLiteCake): IIdentifiableCake {
         return IdentifiableCakeBuilder.newBuilder().setCake(
             CakeBuilder.newBuilder()

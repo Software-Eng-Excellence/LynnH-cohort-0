@@ -1,5 +1,5 @@
 import fs from 'fs';
-import readCSV from '../../src/util/parsers/csvParser';
+import {readCSV} from '../../src/util/parsers/csvParser';
 
 
 describe('CSV Parser', () => {

@@ -1,4 +1,4 @@
-import { Clothing } from "../../models/Clothing.models";
+import { Clothing, IdentifiableClothing } from "../../models/Clothing.models";
 import logger from "../../util/logger";
 
 export class ClothingBuilder {
@@ -12,7 +12,7 @@ export class ClothingBuilder {
     private packaging!: string;
     private specialRequest!: string;
 
-    public static newBuilder():ClothingBuilder{
+    public static newBuilder(): ClothingBuilder {
         return new ClothingBuilder();
     }
 
@@ -74,7 +74,7 @@ export class ClothingBuilder {
         ];
 
         for (const property of requiredProperties) {
-           if (property === undefined || property === null) {
+            if (property === undefined || property === null) {
                 throw new Error('Missing required property');
             }
         }
@@ -91,4 +91,43 @@ export class ClothingBuilder {
         )
     }
 
+}
+
+export class IdentifiableClothingBuilder {
+    private id!: string;
+    private clothing!: Clothing;
+
+    static newBuilder(): IdentifiableClothingBuilder {
+        return new IdentifiableClothingBuilder();
+    }
+
+    setId(id: string): IdentifiableClothingBuilder {
+        this.id = id;
+        return this;
+    }
+
+    setClothing(clothing: Clothing): IdentifiableClothingBuilder {
+        this.clothing = clothing;
+        return this;
+    }
+
+    build(): IdentifiableClothing {
+        if (!this.id || !this.clothing) {
+            logger.error("Missing required properties, could not build an identifiable clothing");
+            throw new Error("Missing required properties");
+        }
+
+        return new IdentifiableClothing(
+            this.id,
+            this.clothing.getType(),
+            this.clothing.getSize(),
+            this.clothing.getColor(),
+            this.clothing.getMaterial(),
+            this.clothing.getPattern(),
+            this.clothing.getBrand(),
+            this.clothing.getGender(),
+            this.clothing.getPackaging(),
+            this.clothing.getSpecialRequest()
+        );
+    }
 }

@@ -1,4 +1,5 @@
-import { Book } from "../../models/Book.models";
+import logger from "../../util/logger";
+import { Book, IdentifiableBook } from "../../models/Book.models";
 
 
 export class BookBuilder{
@@ -84,4 +85,41 @@ export class BookBuilder{
         );
         
     }
+}
+//The IdentifiableBookBuilder allows for adding an ID to a Book object in a separate phase
+
+export class IdentifiableBookBuilder{
+    private id!:string;
+    private book !:Book;
+    static newBuilder(): IdentifiableBookBuilder {
+        return new IdentifiableBookBuilder();
+    }
+
+    
+    setId(id: string): IdentifiableBookBuilder {
+        this.id = id;
+        return this;
+    }
+
+    setBook(book: Book): IdentifiableBookBuilder {
+        this.book = book;
+        return this;
+    }
+    build(): IdentifiableBook {
+        if (!this.id || !this.book) {
+            logger.error("Missing required properties, could not build an identifiable book");
+            throw new Error("Missing required properties");
+        }
+        return new IdentifiableBook(
+            this.id,
+            this.book.getTitle(),
+            this.book.getAuthor(),
+            this.book.getGenre(),
+            this.book.getFormat(),
+            this.book.getLanguage(),
+            this.book.getPublisher(),
+            this.book.getSpecialEdition(),
+            this.book.getPackaging()
+        );
+                }
 }
