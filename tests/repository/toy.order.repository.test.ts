@@ -1,4 +1,4 @@
-import { ToyRepository } from "../../src/repository/postgreSQL/Toy.order.repository";
+import { PostgreSQLToyRepository } from "../../src/repository/postgreSQL/Toy.order.repository";
 import { ConnectionManager } from "../../src/repository/postgreSQL/ConnectionManager";
 import { IdentifiableToy } from "../../src/models/Toy.models";
 import { DbException, InitializationException } from "../../src/util/exceptions/RepositoryException";
@@ -35,10 +35,10 @@ const mockToy: IdentifiableToy = new IdentifiableToy(
 );
 
 describe("ToyRepository", () => {
-    let repository: ToyRepository;
+    let repository: PostgreSQLToyRepository;
 
     beforeEach(() => {
-        repository = new ToyRepository();
+        repository = new PostgreSQLToyRepository();
         jest.clearAllMocks();
     });
 

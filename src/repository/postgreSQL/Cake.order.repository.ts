@@ -5,6 +5,13 @@ import logger from "../../util/logger";
 import { DbException, InitializationException, ItemNotFoundException } from "../../util/exceptions/RepositoryException";
 import { ItemCategory } from "../../models/IItem";
 import { SQLiteCake, SQLCakeMapper } from "../../mappers/Cake.mapper";
+import { DataSourceType, MapperFactory } from "../../mappers/MapperFactory";
+
+
+const mapper = MapperFactory.create<SQLiteCake, IIdentifiableCake>(
+    DataSourceType.POSTGRESQL,
+    ItemCategory.CAKE
+);
 
 const tableName = ItemCategory.CAKE;
 const CREATE_TABLE = `
@@ -90,7 +97,7 @@ SET
     packagingType = $14
 WHERE id = $15;`;
 
-export class CakeRepository implements IRepository<IIdentifiableCake>, Initializable {
+export class PostgreSQLCakeRepository implements IRepository<IIdentifiableCake>, Initializable {
     async init() {
         try {
             const conn = await ConnectionManager.getConnection();
@@ -148,8 +155,9 @@ export class CakeRepository implements IRepository<IIdentifiableCake>, Initializ
             }
 
             const cakeData = result.rows[0];
+             
 
-            return new SQLCakeMapper().map(cakeData);
+            return mapper.map(cakeData);
         } catch (error) {
             logger.error("Failed to get cake of id %s %o", id, error as Error);
 
@@ -167,7 +175,8 @@ export class CakeRepository implements IRepository<IIdentifiableCake>, Initializ
                 return [];
             }
 
-            return result.rows.map((row) => new SQLCakeMapper().map(row));
+
+            return result.rows.map((row) => mapper.map(row));
         } catch (error) {
             logger.error("Failed to get all cakes %o", error as Error);
             throw new DbException("Failed to get all cakes", error as Error);

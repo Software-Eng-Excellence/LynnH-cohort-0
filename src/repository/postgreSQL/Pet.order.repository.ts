@@ -4,7 +4,14 @@ import logger from "../../util/logger";
 import { DbException, InitializationException, ItemNotFoundException } from "../../util/exceptions/RepositoryException";
 import { ItemCategory } from "../../models/IItem";
 import { SQLPet,SQLPetMapper } from "../../mappers/pet.mapper";
+import { DataSourceType, MapperFactory } from "../../mappers/MapperFactory";
+import { IdentifiablePet } from "../../models/Pet.models";
 
+
+const mapper = MapperFactory.create<SQLPet, IdentifiablePet>(
+    DataSourceType.POSTGRESQL,
+    ItemCategory.PET
+);
 const tableName = ItemCategory.PET;
 
 const CREATE_TABLE = `
@@ -58,7 +65,7 @@ SET
 WHERE id = $7;
 `;
 
-export class PetRepository implements IRepository<any>, Initializable {
+export class PostgreSQLPetRepository implements IRepository<any>, Initializable {
     async init() {
         try {
             const conn = await ConnectionManager.getConnection();
@@ -96,7 +103,7 @@ export class PetRepository implements IRepository<any>, Initializable {
             if (!result.rows || result.rows.length === 0) {
                 throw new ItemNotFoundException("Pet product not found");
             }
-            return new SQLPetMapper().map(result.rows[0]);
+            return mapper.map(result.rows[0]);
         } catch (error) {
             logger.error("Failed to get pet product of id %s %o", id, error);
             throw new DbException("Failed to get pet product of id " + id, error as Error);
@@ -111,7 +118,7 @@ export class PetRepository implements IRepository<any>, Initializable {
                 logger.warn("No pets found in the database.");
                 return [];
             }
-            return result.rows.map((row) => new SQLPetMapper().map(row));
+            return result.rows.map((row) => mapper.map(row));
         } catch (error) {
             logger.error("Failed to get all pet products", error);
             throw new DbException("Failed to get all pet products", error as Error);

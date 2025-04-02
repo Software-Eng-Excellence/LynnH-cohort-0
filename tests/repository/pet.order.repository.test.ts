@@ -1,4 +1,4 @@
-import { PetRepository } from "../../src/repository/postgreSQL/Pet.order.repository";
+import { PostgreSQLPetRepository } from "../../src/repository/postgreSQL/Pet.order.repository";
 import { ConnectionManager } from "../../src/repository/postgreSQL/ConnectionManager";
 import { IdentifiablePet } from "../../src/models/Pet.models";
 import { DbException, InitializationException } from "../../src/util/exceptions/RepositoryException";
@@ -35,10 +35,10 @@ const mockPetProduct: IdentifiablePet = new IdentifiablePet(
 );
 
 describe("PetRepository", () => {
-    let repository: PetRepository;
+    let repository: PostgreSQLPetRepository;
 
     beforeEach(() => {
-        repository = new PetRepository();
+        repository = new PostgreSQLPetRepository();
         jest.clearAllMocks();
     });
 

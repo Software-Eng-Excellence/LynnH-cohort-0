@@ -31,7 +31,7 @@ SET
 WHERE id = $5;
 `;
 
-export class OrderRepository implements IRepository<IIdentifiableOrderItem>, Initializable {
+export class PostgreSQLOrderRepository implements IRepository<IIdentifiableOrderItem>, Initializable {
 
     constructor(private readonly itemRepository: IRepository<IIdentifiableItem> & Initializable) {
     }

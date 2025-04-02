@@ -4,7 +4,7 @@ import { DbException, InitializationException, ItemNotFoundException } from "../
 import logger from "../../util/logger";
 import { ConnectionManager } from "./ConnectionManager";
 import { ItemCategory } from "../../models/IItem";
-import { SQLiteCake, SQLiteCakeMapper } from "../../mappers/Cake.mapper";
+import { SQLiteCake, SQLCakeMapper } from "../../mappers/Cake.mapper";
 
 
 const tableName = ItemCategory.CAKE;
@@ -115,7 +115,7 @@ export class CakeRepository implements IRepository<IIdentifiableCake>, Initializ
                 throw new ItemNotFoundException("Cake item not found");
             }
 
-            return new SQLiteCakeMapper().map(result);
+            return new SQLCakeMapper().map(result);
         } catch (error) {
             logger.error("Failed to get cake of id %s %o", id, error as Error);
 
@@ -127,7 +127,7 @@ export class CakeRepository implements IRepository<IIdentifiableCake>, Initializ
         try {
             const conn = await ConnectionManager.getConnection();
             const result = await conn.all<SQLiteCake[]>(SELECT_ALL);
-            const mapper = new SQLiteCakeMapper();
+            const mapper = new SQLCakeMapper();
             if (!result) {
                 return [];
             }

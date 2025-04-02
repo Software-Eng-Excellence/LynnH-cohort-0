@@ -1,4 +1,4 @@
-import { OrderRepository } from "../../src/repository/postgreSQL/Order.repository";
+import { PostgreSQLOrderRepository } from "../../src/repository/postgreSQL/Order.repository";
 import { ConnectionManager } from "../../src/repository/postgreSQL/ConnectionManager";
 import { IIdentifiableOrderItem } from "../../src/models/IOrder";
 import { IIdentifiableItem, ItemCategory } from "../../src/models/IItem";
@@ -49,10 +49,10 @@ const mockItemRepository = {
 };
 
 describe("OrderRepository", () => {
-    let repository: OrderRepository;
+    let repository: PostgreSQLOrderRepository;
 
     beforeEach(() => {
-        repository = new OrderRepository(mockItemRepository);
+        repository = new PostgreSQLOrderRepository(mockItemRepository);
         jest.clearAllMocks();
     });
 

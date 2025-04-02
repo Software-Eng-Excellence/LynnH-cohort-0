@@ -1,7 +1,7 @@
-import { ClothingRepository } from "../../src/repository/postgreSQL/Clothing.order.repository";
+import { PostgreSQLClothingRepository } from "../../src/repository/postgreSQL/Clothing.order.repository";
 import { ConnectionManager } from "../../src/repository/postgreSQL/ConnectionManager";
 import { IdentifiableClothing } from "../../src/models/Clothing.models";
-import { DbException, InitializationException, ItemNotFoundException } from "../../src/util/exceptions/RepositoryException";
+import { DbException, InitializationException } from "../../src/util/exceptions/RepositoryException";
 import { Client } from "pg";
 import logger from "../../src/util/logger";
 
@@ -37,10 +37,10 @@ const mockClothing: IdentifiableClothing = new IdentifiableClothing(
 );
 
 describe("ClothingRepository", () => {
-    let repository: ClothingRepository;
+    let repository: PostgreSQLClothingRepository;
 
     beforeEach(() => {
-        repository = new ClothingRepository();
+        repository = new PostgreSQLClothingRepository();
         jest.clearAllMocks();
     });
 
