@@ -1,0 +1,113 @@
+openapi: 3.0.0
+info:
+  title: Order Analytics API
+  description: API for providing analytics on orders
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/api
+paths:
+  /analytics/orders/total:
+    get:
+      tags:
+        - analytics
+      summary: Get the total number of orders
+      responses:
+        '200':
+          description: Total number of orders
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalOrders:
+                    type: integer
+                    example: 12345
+  /analytics/orders/item-type:
+    get:
+      tags:
+        - analytics
+      summary: Get the number of orders per item type
+      responses:
+        '200':
+          description: Number of orders per item type
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: integer
+                example:
+                  "cakes": 2345
+                  "books": 456
+                  "clothing": 789
+  /analytics/revenue/total:
+    get:
+      tags:
+        - analytics
+      summary: Get the total revenue generated from all orders
+      responses:
+        '200':
+          description: Total revenue generated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalRevenue:
+                    type: number
+                    format: float
+                    example: 145000.75
+  /analytics/revenue/item-type:
+    get:
+      tags:
+        - analytics
+      summary: Get revenue breakdown by item type
+      responses:
+        '200':
+          description: Revenue breakdown by item type
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: number
+                  format: float
+                example:
+                  "cakes": 45600.50
+                  "books": 3450.00
+                  "clothing": 9800.25
+  /analytics/orders/status:
+    get:
+      tags:
+        - analytics
+      summary: Get the number of orders by status (e.g., Pending, Shipped, Delivered)
+      responses:
+        '200':
+          description: Number of orders by status
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: integer
+                example:
+                  "Pending": 5000
+                  "Shipped": 3000
+                  "Delivered": 4000
+  /analytics/orders/average-value:
+    get:
+      tags:
+        - analytics
+      summary: Get the average order value
+      responses:
+        '200':
+          description: Average order value
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  averageOrderValue:
+                    type: number
+                    format: float
+                    example: 123.45
