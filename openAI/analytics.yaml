@@ -3,8 +3,6 @@ info:
   title: Order Analytics API
   description: API for providing analytics on orders
   version: 1.0.0
-servers:
-  - url: http://localhost:8080/api
 paths:
   /analytics/orders/total:
     get:
