@@ -14,5 +14,5 @@ export enum ItemCategory{
     FURNITURE = "furniture",
     PET = "pet",
     TOY = "toy",
-    Test="test"
+
 }

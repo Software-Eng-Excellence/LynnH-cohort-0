@@ -15,7 +15,8 @@ import { IdentifiableToy } from "../models/Toy.models";
 
 export enum DataSourceType {
     FILE,
-    POSTGRESQL
+    POSTGRESQL,
+    SQLITE 
 }
 
 export class MapperFactory {

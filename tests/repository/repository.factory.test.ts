@@ -49,14 +49,6 @@ describe('RepositoryFactory', () => {
     expect(repository).toBeInstanceOf(PostgreSQLOrderRepository);
   });
 
-
-  it('should throw error for unsupported category in POSTGRESQL mode', async () => {
-    await expect(RepositoryFactory.create(DBMode.POSTGRESQL, ItemCategory.Test))
-      .rejects
-      .toThrowError('Unsupported category');
-  });
-
-
   it('should return CakeOrderRepository for DBMode.SQLITE and ItemCategory.CAKE', async () => {
     const repository = await RepositoryFactory.create(DBMode.SQLITE, ItemCategory.CAKE);
     expect(repository).toBeInstanceOf(OrderRepository);
@@ -67,15 +59,5 @@ describe('RepositoryFactory', () => {
     expect(repository).toBeInstanceOf(CakeOrderRepository);
   });
 
-  it('should throw error for invalid DB mode even with valid category', async () => {
-    await expect(RepositoryFactory.create(DBMode.TEST, ItemCategory.CAKE))
-      .rejects
-      .toThrowError('Unsupported DB mode');
-  });
 
-  it('should throw error for unsupported category in SQLITE mode', async () => {
-    await expect(RepositoryFactory.create(DBMode.SQLITE, ItemCategory.Test))
-      .rejects
-      .toThrowError('Unsupported category');
-  });
 });

@@ -19,7 +19,7 @@ export enum DBMode {
     SQLITE,
     FILE,
     POSTGRESQL,
-    TEST
+   
 }
 
 export class RepositoryFactory {
