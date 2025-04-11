@@ -5,7 +5,12 @@ import logger from "../../util/logger";
 import { DbException, InitializationException, ItemNotFoundException } from "../../util/exceptions/RepositoryException";
 import { ItemCategory } from "../../models/IItem";
 import { SQLClothing, SQLClothingMapper } from "../../mappers/Clothing.mapper";
+import { DataSourceType, MapperFactory } from "../../mappers/MapperFactory";
 
+const mapper = MapperFactory.create<SQLClothing, IdentifiableClothing>(
+    DataSourceType.POSTGRESQL,
+    ItemCategory.CLOTHING
+);
 const tableName = ItemCategory.CLOTHING;
 
 const CREATE_TABLE = `
@@ -76,7 +81,7 @@ SET
 WHERE id = $10;
 `;
 
-export class ClothingRepository implements IRepository<IdentifiableClothing>, Initializable {
+export class PostgreSQLClothingRepository implements IRepository<IdentifiableClothing>, Initializable {
     async init() {
         try {
             const conn = await ConnectionManager.getConnection();
@@ -121,7 +126,8 @@ export class ClothingRepository implements IRepository<IdentifiableClothing>, In
             }
 
             const clothingData = result.rows[0];
-            return new SQLClothingMapper().map(clothingData);
+            
+            return mapper.map(clothingData);
         } catch (error) {
             logger.error("Failed to get clothing item with id %s", id, error as Error);
             throw new DbException("Failed to get clothing item", error as Error);
@@ -137,8 +143,8 @@ export class ClothingRepository implements IRepository<IdentifiableClothing>, In
                 logger.warn("No clothing items found in the database.");
                 return [];
             }
-
-            return result.rows.map((row) => new SQLClothingMapper().map(row));
+           
+            return result.rows.map((row) => mapper.map(row));
         } catch (error) {
             logger.error("Failed to get all clothing items", error as Error);
             throw new DbException("Failed to get all clothing items", error as Error);

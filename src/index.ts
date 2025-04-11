@@ -1,20 +1,15 @@
 import config from "./config/index";
 import logger from "./util/logger";
 import { CakeOrderRepository } from "./repository/file/Cake.order.repository";
-import { CakeRepository } from "./repository/postgreSQL/Cake.order.repository";
-import { OrderRepository } from "./repository/postgreSQL/Order.repository";
 import { CakeBuilder, IdentifiableCakeBuilder } from "../src/models/builders/cake.builder";
 import { IdentifiableOrderItemBuilder, OrderBuilder } from "../src/models/builders/order.builder";
-import { BookRepository } from "./repository/postgreSQL/Book.order.repository";
 import { BookBuilder, IdentifiableBookBuilder } from "./models/builders/book.builder";
-import { PetRepository } from "./repository/postgreSQL/Pet.order.repository";
 import { IdentifiablePetBuilder, PetBuilder } from "./models/builders/pet.builder";
-import { ClothingRepository } from "./repository/postgreSQL/Clothing.order.repository";
 import { ClothingBuilder, IdentifiableClothingBuilder } from "./models/builders/clothing.builder";
-import { ToyRepository } from "./repository/postgreSQL/Toy.order.repository";
 import { IdentifiableToyBuilder, ToyBuilder } from "./models/builders/toy.builder";
-import { FurnitureRepository } from "./repository/postgreSQL/Furniture.order.repository";
 import { FurnitureBuilder, IdentifiableFurnitureBuilder } from "./models/builders/furniture.builder";
+import { DBMode, RepositoryFactory } from "./repository/RepositoryFactory";
+import { ItemCategory } from "./models/IItem";
 
 const { cakeOrderPath } = config.storagePath.csv;
 
@@ -26,8 +21,8 @@ async function main() {
 }
 
 async function DBSandBox() {
-   const dbOrder = new OrderRepository(new CakeRepository());
-   await dbOrder.init()
+   const dbOrder = await RepositoryFactory.create(DBMode.SQLITE, ItemCategory.CAKE);
+
 
    //create identifiable cake
    const cake = CakeBuilder.newBuilder()
@@ -58,7 +53,7 @@ async function DBSandBox() {
    await dbOrder.create(idOrder);
    await dbOrder.delete(idOrder.getId());
    await dbOrder.update(idOrder);
-   console.log("example", (await dbOrder.getAll()).length)
+   console.log( (await dbOrder.getAll()).length)
 }
 
 //main();
@@ -68,8 +63,7 @@ async function DBSandBox() {
 async function postgreSQLConnection() {
 
 
-   const dbOrder = new OrderRepository(new CakeRepository());
-   await dbOrder.init()
+   const dbOrder = await RepositoryFactory.create(DBMode.POSTGRESQL, ItemCategory.CAKE);
 
    const cake = CakeBuilder.newBuilder()
       .setType("Chocolate Cake")
@@ -96,13 +90,14 @@ async function postgreSQLConnection() {
       .setQuantity(2)
       .build();
    const idOrder = IdentifiableOrderItemBuilder.newBuilder().setItem(idCake).setOrder(order).build();
-   //await dbOrder.getAll();
+   await dbOrder.getAll();
 
    await dbOrder.create(idOrder);
    await dbOrder.get(idOrder.getId());
+
    //await dbOrder.update(idOrder);
    //await dbOrder.delete(idOrder.getId());
-   //console.log("example", (await dbOrder.getAll()).length)
+   console.log( (await dbOrder.getAll()).length)
 }
 
 //postgreSQLConnection();
@@ -110,8 +105,7 @@ async function postgreSQLConnection() {
 
 async function PostegreSQLBookRepo() {
 
-   const dbOrder = new OrderRepository(new BookRepository());
-   await dbOrder.init();
+   const dbOrder = await RepositoryFactory.create(DBMode.POSTGRESQL, ItemCategory.BOOK);
    const book = BookBuilder.newBuilder()
       .setTitle("The Great Gatsby")
       .setAuthor("F. Scott Fitzgerald")
@@ -148,8 +142,7 @@ async function PostegreSQLBookRepo() {
 
 async function PostegreSQLPetRepo() {
 
-   const dbOrder = new OrderRepository(new PetRepository());
-   await dbOrder.init();
+   const dbOrder = await RepositoryFactory.create(DBMode.POSTGRESQL, ItemCategory.PET);
    const pet = PetBuilder.newBuilder()
       .setProductType("Pet Food")
       .setPetType("Dog")
@@ -187,8 +180,7 @@ async function PostegreSQLPetRepo() {
 
 async function PostegreSQLClothingRepo() {
 
-   const dbOrder = new OrderRepository(new ClothingRepository());
-   await dbOrder.init();
+   const dbOrder = await RepositoryFactory.create(DBMode.POSTGRESQL, ItemCategory.CLOTHING);
    const clothing = ClothingBuilder.newBuilder()
       .setType('T-shirt')
       .setSize('L')
@@ -222,15 +214,14 @@ async function PostegreSQLClothingRepo() {
    await dbOrder.getAll()
    await dbOrder.update(idOrder);
    await dbOrder.delete(idOrder.getId());
-   console.log((await dbOrder.getAll()).length);
+   console.log((await dbOrder.getAll()));
 }
 
 //PostegreSQLClothingRepo()
 
 async function PostegreSQLToyRepo() {
 
-   const dbOrder = new OrderRepository(new ToyRepository());
-   await dbOrder.init();
+   const dbOrder = await RepositoryFactory.create(DBMode.POSTGRESQL, ItemCategory.TOY);
    const toy = ToyBuilder.newBuilder()
       .setType("Action Figure")
       .setAgeGroup("6-10")
@@ -268,8 +259,7 @@ async function PostegreSQLToyRepo() {
 
 async function PostegreSQLFurnitureRepo() {
 
-   const dbOrder = new OrderRepository(new FurnitureRepository());
-   await dbOrder.init();
+   const dbOrder = await RepositoryFactory.create(DBMode.POSTGRESQL, ItemCategory.FURNITURE);
    const furniture = FurnitureBuilder.newBuilder()
       .setType("Sofa")
       .setMaterial("Leather")
@@ -301,7 +291,7 @@ async function PostegreSQLFurnitureRepo() {
    await dbOrder.getAll()
    await dbOrder.update(idOrder);
    await dbOrder.delete(idOrder.getId());
-   console.log((await dbOrder.getAll()).length);
+   //console.log((await dbOrder.getAll()));
 }
 
 PostegreSQLFurnitureRepo();

@@ -4,7 +4,13 @@ import { ConnectionManager } from "./ConnectionManager";
 import logger from "../../util/logger";
 import { DbException, InitializationException, ItemNotFoundException } from "../../util/exceptions/RepositoryException";
 import { ItemCategory } from "../../models/IItem";
-import { SQLBook, PostgreSQLBookMapper } from "../../mappers/Book.mapper";
+import { SQLBook } from "../../mappers/Book.mapper";
+import { DataSourceType, MapperFactory } from "../../mappers/MapperFactory";
+
+const mapper = MapperFactory.create<SQLBook, IdentifiableBook>(
+    DataSourceType.POSTGRESQL,
+    ItemCategory.BOOK
+);
 
 const tableName = ItemCategory.BOOK;
 const CREATE_TABLE = `
@@ -68,7 +74,7 @@ SET
     packaging = $8
 WHERE id = $9;`;
 
-export class BookRepository implements IRepository<IdentifiableBook>, Initializable {
+export class PostgreSQLBookRepository implements IRepository<IdentifiableBook>, Initializable {
     async init() {
         try {
             const conn = await ConnectionManager.getConnection();
@@ -108,7 +114,8 @@ export class BookRepository implements IRepository<IdentifiableBook>, Initializa
             if (!result.rows || result.rows.length === 0) {
                 throw new ItemNotFoundException("Book not found");
             }
-            return new PostgreSQLBookMapper().map(result.rows[0]);
+          
+            return mapper.map(result.rows[0]);
         } catch (error) {
             logger.error("Failed to get book of id %s %o", id, error as Error);
             throw new DbException("Failed to get book of id " + id, error as Error);
@@ -123,7 +130,8 @@ export class BookRepository implements IRepository<IdentifiableBook>, Initializa
                 logger.warn("No books found in the database.");
                 return [];
             }
-            return result.rows.map((row) => new PostgreSQLBookMapper().map(row));
+            
+            return result.rows.map((row) => mapper.map(row));
         } catch (error) {
             logger.error("Failed to get all books %o", error as Error);
             throw new DbException("Failed to get all books", error as Error);

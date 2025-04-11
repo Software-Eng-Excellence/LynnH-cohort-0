@@ -1,4 +1,4 @@
-import { CakeRepository } from "../../src/repository/postgreSQL/Cake.order.repository";
+import {  PostgreSQLCakeRepository } from "../../src/repository/postgreSQL/Cake.order.repository";
 import { ConnectionManager } from "../../src/repository/postgreSQL/ConnectionManager";
 import { IIdentifiableCake } from "../../src/models/Cake.models";
 import { DbException, InitializationException, ItemNotFoundException } from "../../src/util/exceptions/RepositoryException";
@@ -63,10 +63,10 @@ const nullCake = new IIdentifiableCake(
 
 
 describe("CakeRepository", () => {
-    let repository: CakeRepository;
+    let repository: PostgreSQLCakeRepository;
 
     beforeEach(() => {
-        repository = new CakeRepository();
+        repository = new PostgreSQLCakeRepository();
         jest.clearAllMocks();
     });
 
