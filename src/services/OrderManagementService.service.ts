@@ -1,11 +1,9 @@
-import { Order } from "models/Order.model";
-import { generateUUID } from "../util/exceptions";
 import { ServiceException } from "../util/exceptions/ServiceException";
-import { RepositoryFactory } from "repository/RepositoryFactory";
-import config from "config";
-import { IIdentifiableOrderItem } from "models/IOrder";
-import { ItemCategory } from "models/IItem";
-import { IRepository } from "repository/IRepository";
+import { DBMode, RepositoryFactory } from "../repository/RepositoryFactory";
+import config from "../config/index";
+import { IIdentifiableOrderItem } from "../models/IOrder";
+import { ItemCategory } from "../models/IItem";
+import { IRepository } from "../repository/IRepository";
 
 export class OrderManagmentService {
     //create an order
@@ -79,6 +77,50 @@ export class OrderManagmentService {
         const orders = await this.getAllOrders();
         return orders.length;
     }
+
+    //get volumne analytics
+    public async getOrderVolumeAnalytics(): Promise<{
+        totalOrderCount: number;
+        orderCountsByItemType: Record<string, number>;
+    }> {
+        const orders = await this.getAllOrders();
+    
+        // Calculate total order count
+        const totalOrderCount = orders.length;
+    
+        // Group order counts by item type
+        const orderCountsByItemType: Record<string, number> = {};
+        for (const order of orders) {
+            const itemType = order.getItem().getCategory();
+            orderCountsByItemType[itemType] = (orderCountsByItemType[itemType] || 0) + 1;
+        }
+    
+        return { totalOrderCount, orderCountsByItemType };
+    }
+
+    // Revenue Analytics
+public async getRevenueAnalytics(): Promise<{
+    totalRevenue: number;
+    revenueByItemType: Record<string, number>;
+}> {
+    const orders = await this.getAllOrders();
+
+    // Calculate total revenue
+    const totalRevenue = orders.reduce(
+        (acc, order) => acc + order.getPrice() * order.getQuantity(),
+        0
+    );
+
+    // Compute revenue breakdown by item type
+    const revenueByItemType: Record<string, number> = {};
+    for (const order of orders) {
+        const itemType = order.getItem().getCategory();
+        const orderRevenue = order.getPrice() * order.getQuantity();
+        revenueByItemType[itemType] = (revenueByItemType[itemType] || 0) + orderRevenue;
+    }
+
+    return { totalRevenue, revenueByItemType };
+}
 
     private async getRepo(category: ItemCategory): Promise<IRepository<IIdentifiableOrderItem>> {
         return RepositoryFactory.create(config.dbMode, category);
