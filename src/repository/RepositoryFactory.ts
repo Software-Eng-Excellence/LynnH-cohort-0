@@ -1,6 +1,6 @@
 import { ItemCategory } from "../models/IItem";
 import { Initializable, IRepository } from "./IRepository";
-import { IOrder } from "../models/IOrder";
+import { IIdentifiableOrderItem, IOrder } from "../models/IOrder";
 
 import { CakeRepository } from "./sqlite/Cake.order.repository";
 import { CakeOrderRepository } from "./file/Cake.order.repository";
@@ -13,22 +13,23 @@ import { PostgreSQLBookRepository } from "./postgreSQL/Book.order.repository";
 import { PostgreSQLFurnitureRepository } from "./postgreSQL/Furniture.order.repository";
 import { PostgreSQLPetRepository } from "./postgreSQL/Pet.order.repository";
 import { PostgreSQLToyRepository } from "./postgreSQL/Toy.order.repository";
+import { IdentifiableOrderItem } from "models/Order.model";
 
 
 export enum DBMode {
     SQLITE,
     FILE,
     POSTGRESQL,
-   
+
 }
 
 export class RepositoryFactory {
 
-    public static async create(mode: DBMode, category: ItemCategory): Promise<IRepository<IOrder>> {
-      
+    public static async create(mode: DBMode, category: ItemCategory): Promise<IRepository<IIdentifiableOrderItem>> {
+
         switch (mode) {
             case DBMode.SQLITE: {
-                let repository: IRepository<IOrder> & Initializable;
+                let repository: IRepository<IIdentifiableOrderItem> & Initializable;
                 switch (category) {
                     case ItemCategory.CAKE:
                         repository = new OrderRepository(new CakeRepository());
@@ -39,25 +40,21 @@ export class RepositoryFactory {
                 await repository.init();
                 return repository;
             }
+            //Deprecated
             case DBMode.FILE:
-                switch (category) {
-                    case ItemCategory.CAKE:
-                        return new CakeOrderRepository(config.storagePath.csv.cakeOrderPath);
-                    default:
-                        throw new Error("Unsupported category");
-                }
+                throw new Error("File mode is Deprecated");
             case DBMode.POSTGRESQL:
-                let repository: IRepository<IOrder> & Initializable;
-              
+                let repository: IRepository<IIdentifiableOrderItem> & Initializable;
+
                 switch (category) {
-                    
+
                     case ItemCategory.CAKE:
-                     
+
                         repository = new PostgreSQLOrderRepository(new PostgreSQLCakeRepository());
-                    
+
                         break;
                     case ItemCategory.CLOTHING:
-                       
+
                         repository = new PostgreSQLOrderRepository(new PostgreSQLClothingRepository());
                         break;
                     case ItemCategory.BOOK:
@@ -78,7 +75,7 @@ export class RepositoryFactory {
                 await repository.init();
                 return repository;
             default:
-            
+
                 throw new Error("Unsupported DB mode");
         }
 
