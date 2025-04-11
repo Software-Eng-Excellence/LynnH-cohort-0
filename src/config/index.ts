@@ -25,20 +25,21 @@ export default {
         },
         sqlite:
             "src/data/orders.sqlite.db",
-        
-       
+
+
 
     },
-    dbConnection:{
+    dbConnection: {
         dbUser: process.env.DBUSER,
-        dbHost:process.env.DBHOST,
-        dbPort:parseInt(process.env.DBPORT || "5432", 10),
-        dbDatabase:process.env.DBDATABASE,
-        dbPassword:process.env.DBPASSWORD
+        dbHost: process.env.DBHOST,
+        dbPort: parseInt(process.env.DBPORT || "5432", 10),
+        dbDatabase: process.env.DBDATABASE,
+        dbPassword: process.env.DBPASSWORD
 
 
-    }
-
+    },
+    port: process.env.PORT? parseInt(process.env.PORT) : 3000,
+    host: process.env.HOST || 'localhost',
 
 
 
